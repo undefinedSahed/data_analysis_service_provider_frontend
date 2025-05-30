@@ -1,6 +1,9 @@
+import HomeBanner from "@/components/home/banner";
 
 export default function Home() {
   return (
-    <h2>Quantivo</h2>
+    <main>
+      <HomeBanner />
+    </main>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "../globals.css";
 import { QueryProvider } from "@/providers/query-provider";
+import LayoutVisibilityWrapper from "@/providers/layout-visibility-wraper";
 
 const manrope = Manrope({
   weight: ["400", "500", "600", "700"],
@@ -24,7 +25,9 @@ export default function RootLayout({
         className={`${manrope.className} antialiased`}
       >
         <QueryProvider>
-          {children}
+          <LayoutVisibilityWrapper>
+            {children}
+          </LayoutVisibilityWrapper>
         </QueryProvider>
       </body>
     </html>
