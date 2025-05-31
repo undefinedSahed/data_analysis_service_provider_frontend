@@ -75,7 +75,9 @@ export default function VerifyOTPForm() {
                                                             {otpValues.map((value, index) => (
                                                                 <Input
                                                                     key={index}
-                                                                    ref={(el) => (inputRefs.current[index] = el)}
+                                                                    ref={(el) => {
+                                                                        inputRefs.current[index] = el;
+                                                                    }}
                                                                     type="text"
                                                                     inputMode="numeric"
                                                                     maxLength={1}
@@ -84,6 +86,7 @@ export default function VerifyOTPForm() {
                                                                     onKeyDown={(e) => handleKeyDown(index, e)}
                                                                     className="w-12 h-12 text-center text-lg font-semibold border-2 rounded-lg focus:border-[#00A3E1]"
                                                                 />
+
                                                             ))}
                                                         </div>
                                                     </FormControl>
