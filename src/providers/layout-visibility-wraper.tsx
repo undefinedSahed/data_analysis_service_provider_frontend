@@ -7,12 +7,12 @@ import Navbar from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
 
 const HIDDEN_ROUTES = [
-    "/ceo",
-    "/admin",
-    "/sales",
-    "/customer-dashboard",
-    "/admin",
-    "/auth"
+    "/signup",
+    "/login",
+    "/forgot-password",
+    "/reset-password",
+    "/verify",
+    "/verify-otp",
 ];
 
 export default function LayoutVisibilityWrapper({

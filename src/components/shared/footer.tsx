@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 
 export function Footer() {
     return (
-        <footer className="w-full text-white" style={{ backgroundColor: "#035F8A" }}>
+        <footer className="w-full text-white lg:py-20 py-8" style={{ backgroundColor: "#035F8A" }}>
             <div className="container mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* Company Info */}

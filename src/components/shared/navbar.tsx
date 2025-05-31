@@ -55,7 +55,7 @@ export default function Navbar() {
                         <div className="hidden md:flex items-center space-x-4">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <div className="flex items-center">
+                                    <div className="flex items-center cursor-pointer">
                                         <Button variant="default" size="icon" className="text-white bg-primary rounded-full">
                                             <div className="">
                                                 <User className="h-7 w-7" />
@@ -67,7 +67,9 @@ export default function Navbar() {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                     <DropdownMenuItem>Log In</DropdownMenuItem>
-                                    <DropdownMenuItem>Sign Up</DropdownMenuItem>
+                                    <DropdownMenuItem className="cursor-pointer">
+                                        <Link href="/signup">Sign Up</Link>
+                                    </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                             <Button className="bg-[#38B1EA] hover:bg-cyan-600 text-white px-6 py-2 rounded-md font-medium">
