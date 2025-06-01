@@ -22,9 +22,9 @@ export default function Navbar() {
 
     return (
         <header className="fixed top-0 z-50 w-full">
-            <nav className="w-full bg-[#131313]/60 backdrop-blur-lg">
+            <nav className="w-full bg-[#131313]">
                 <div className="container mx-auto">
-                    <div className="flex items-center justify-between h-16">
+                    <div className="flex items-center justify-between lg:h-20 h-16">
                         {/* Logo */}
                         <div className="flex-shrink-0">
                             <Link href="/" className="flex items-center space-x-2">
