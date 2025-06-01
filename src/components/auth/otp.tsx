@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { useRef, useState } from "react"
+import Image from "next/image"
 
 const formSchema = z.object({
     otp: z.string().length(6, { message: "OTP must be exactly 6 digits" }).regex(/^\d+$/, { message: "OTP must contain only numbers" })
@@ -55,7 +56,14 @@ export default function VerifyOTPForm() {
                 <div className="w-full max-w-6xl shadow-[0px_0px_60px_0px_#00000040] rounded-lg overflow-hidden">
                     <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
                         {/* Left side - Blue div (hidden on small screens) */}
-                        <div className="hidden lg:block bg-[#035F8A] min-h-[600px]"></div>
+                        <div className="relative hidden lg:block min-h-[600px]">
+                            <Image
+                                src="/images/auth.png"
+                                alt="Authentication Image"
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
 
                         {/* Right side - Form */}
                         <div className="p-8 md:p-12">
