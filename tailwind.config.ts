@@ -15,6 +15,15 @@ const config: Config = {
 			}
 		},
 		extend: {
+			keyframes: {
+				scroll: {
+					'0%': { transform: 'translateX(0%)' },
+					'100%': { transform: 'translateX(-50%)' },
+				},
+			},
+			animation: {
+				scroll: 'scroll 25s linear infinite',
+			},
 			colors: {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',

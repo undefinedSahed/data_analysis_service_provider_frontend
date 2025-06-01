@@ -2,11 +2,12 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, User, Cloud, ChevronDown } from "lucide-react"
+import { Menu, User, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 
 const navigationItems = [
     { name: "Home", href: "/" },
@@ -17,27 +18,31 @@ const navigationItems = [
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
-    const pathname = usePathname();
-
+    const pathname = usePathname()
 
     return (
-        <header className="fixed     top-0 z-50 w-full">
-            <nav className="w-full bg-[#131313]/40 backdrop-blur-lg">
+        <header className="fixed top-0 z-50 w-full">
+            <nav className="w-full bg-[#131313]/60 backdrop-blur-lg">
                 <div className="container mx-auto">
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
                         <div className="flex-shrink-0">
                             <Link href="/" className="flex items-center space-x-2">
-                                <Cloud className="h-8 w-8 text-white" />
-                                <span className="text-white text-xl font-bold">QUANTIVO</span>
+                                <Image
+                                    src="/images/logo.png"
+                                    alt="Logo"
+                                    width={600}
+                                    height={300}
+                                    className="w-36"
+                                />
                             </Link>
                         </div>
 
-                        {/* Desktop Navigation */}
-                        <div className="hidden md:block">
+                        {/* Desktop Navigation - Now only shows on large screens (lg and up) */}
+                        <div className="hidden lg:block">
                             <div className="ml-10 flex items-baseline space-x-8">
                                 {navigationItems.map((item) => {
-                                    const isActive = item.href === pathname;
+                                    const isActive = item.href === pathname
                                     return (
                                         <Link
                                             key={item.name}
@@ -51,8 +56,8 @@ export default function Navbar() {
                             </div>
                         </div>
 
-                        {/* Right side - Desktop */}
-                        <div className="hidden md:flex items-center space-x-4">
+                        {/* Right side - Desktop - Now only shows on large screens */}
+                        <div className="hidden lg:flex items-center space-x-4">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <div className="flex items-center cursor-pointer">
@@ -77,8 +82,8 @@ export default function Navbar() {
                             </Button>
                         </div>
 
-                        {/* Mobile menu button */}
-                        <div className="md:hidden">
+                        {/* Mobile/Tablet menu button - Now shows on tablets too */}
+                        <div className="lg:hidden">
                             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                                 <SheetTrigger asChild>
                                     <Button variant="ghost" size="icon" className="text-white hover:text-cyan-400 hover:bg-white/10">
@@ -88,27 +93,33 @@ export default function Navbar() {
                                 </SheetTrigger>
                                 <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                                     <div className="flex flex-col space-y-4 mt-8">
-                                        {navigationItems.map((item) => (
-                                            <Link
-                                                key={item.name}
-                                                href={item.href}
-                                                className="text-lg font-medium hover:text-cyan-600 transition-colors duration-200"
-                                                onClick={() => setIsOpen(false)}
-                                            >
-                                                {item.name}
-                                            </Link>
-                                        ))}
+                                        {navigationItems.map((item) => {
+                                            const isActive = item.href === pathname
+                                            return (
+                                                <Link
+                                                    key={item.name}
+                                                    href={item.href}
+                                                    className={`${isActive ? "text-cyan-400" : "text-foreground"} text-lg font-medium hover:text-cyan-600 transition-colors duration-200`}
+                                                    onClick={() => setIsOpen(false)}
+                                                >
+                                                    {item.name}
+                                                </Link>
+                                            )
+                                        })}
                                         <div className="pt-4 border-t">
-                                            <Button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white mb-4">Strategy session</Button>
+                                            <Button className="w-full bg-[#38B1EA] hover:bg-cyan-600 text-white mb-4">
+                                                Strategy session
+                                            </Button>
                                             <div className="space-y-2">
                                                 <Button variant="ghost" className="w-full justify-start">
-                                                    Profile
+                                                    <Link href="/login" className="w-full text-left">
+                                                        Log In
+                                                    </Link>
                                                 </Button>
                                                 <Button variant="ghost" className="w-full justify-start">
-                                                    Settings
-                                                </Button>
-                                                <Button variant="ghost" className="w-full justify-start">
-                                                    Sign out
+                                                    <Link href="/signup" className="w-full text-left">
+                                                        Sign Up
+                                                    </Link>
                                                 </Button>
                                             </div>
                                         </div>
@@ -119,6 +130,6 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav>
-        </header >
+        </header>
     )
 }
