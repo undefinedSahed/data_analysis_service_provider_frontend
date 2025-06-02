@@ -15,7 +15,7 @@ const logos = [
     "/images/cl10.png",
 ];
 
-export default function LogoScroller() {
+export default function ClientCompanies() {
     return (
         <div className="overflow-hidden w-full bg-white py-8 lg:py-20">
             <h2 className="text-center pb-4 lg:pb-12 text-xl lg:text-4xl font-bold">More Than 200+ Company Trusted Us</h2>
