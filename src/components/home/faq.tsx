@@ -41,7 +41,7 @@ export default function FAQSection() {
     const [openItem, setOpenItem] = useState("item-1")
 
     return (
-        <section className="py-8 lg:py-20 bg-[#EBF7FD]">
+        <section className="py-8 lg:py-20 bg-[#EBF7FD]" id="faq">
             <div className="container mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8 md:mb-10 lg:mb-12">

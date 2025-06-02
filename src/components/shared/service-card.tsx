@@ -21,7 +21,7 @@ export default function ServiceCard({
                 height={1000}
                 className='w-52 aspect-[5/4] object-cover mx-auto mb-8 rounded-sm'
             />
-            <h3 className='text-2xl font-semibold pb-4 capitalize'>
+            <h3 className='text-xl lg:text-2xl font-semibold pb-4 capitalize'>
                 {serviceTitle}
             </h3>
             <p className='text-base text-justify'>

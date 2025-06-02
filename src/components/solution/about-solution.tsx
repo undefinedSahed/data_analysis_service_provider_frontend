@@ -5,14 +5,14 @@ export default function AboutSolution() {
   return (
     <section className='py-8 lg:py-20'>
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 items-center">
+        <div className="grid grid-cols-1 lg:gap-10 lg:grid-cols-2 items-center">
           <div className="pb-5">
             <Image
               src="/images/inspire.jpg"
               alt="Professional woman working with digital technology and data visualization"
               width={600}
               height={400}
-              className="rounded-xl"
+              className="rounded-xl w-full aspect-[5/3] object-cover"
               priority
             />
           </div>

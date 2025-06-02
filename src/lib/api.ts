@@ -52,3 +52,19 @@ export async function fetchSolutions() {
         );
     }
 }
+
+
+
+
+
+// Blog API
+export async function fetchBlogs() {
+    try {
+        const response = await api.get("/blog/get")
+        return response.data
+    } catch (error: any) {
+        throw new Error(
+            error.message || "Failed to fetch blogs"
+        )
+    }
+}

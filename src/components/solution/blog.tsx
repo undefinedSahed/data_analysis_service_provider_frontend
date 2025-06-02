@@ -1,31 +1,33 @@
 "use client"
 
-import { fetchServices } from '@/lib/api'
+import { fetchBlogs } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import React from 'react'
-import ServiceCard from './service-card'
+import BlogCard from '../shared/blog-card'
 
-export interface ServiceType {
+export interface BlogType {
     _id: string;
-    serviceTitle: string;
-    serviceDescription: string;
+    blogTitle: string;
     imageLink: string;
+    createdAt: string
 }
 
-export default function Services() {
+export default function BlogForSolutionPage() {
 
-    const { data: services, isLoading, isError, error } = useQuery({
-        queryKey: ['services'],
-        queryFn: fetchServices
+    const { data: blogs, isLoading, isError, error } = useQuery({
+        queryKey: ['blogs'],
+        queryFn: fetchBlogs,
+        select: selectedBlog => selectedBlog.data.slice(0, 4)
     })
 
 
+
     return (
-        <section className='py-8 lg:py-20 bg-[#EBF7FD]' id='services'>
+        <section className='py-8 lg:py-20'>
             <div className="container mx-auto">
                 <div className="text-center pb-6 lg:pb-12">
-                    <h2 className='text-2xl lg:text-5xl font-bold text-[#424242]'>Services</h2>
+                    <h2 className='text-2xl lg:text-5xl font-bold text-[#424242]'>Blogs</h2>
                 </div>
 
                 {isLoading && <div className="flex items-center justify-center gap-6">
@@ -35,13 +37,13 @@ export default function Services() {
 
                 {isError && <div className='text-center'>Error: {error?.message}</div>}
 
-                {services && <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {services?.data.map((service: ServiceType) => (
-                        <ServiceCard
+                {blogs && <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8 lg:gap-y-14">
+                    {blogs?.map((service: BlogType) => (
+                        <BlogCard
                             key={service._id}
-                            serviceTitle={service.serviceTitle}
-                            serviceDescription={service.serviceDescription}
+                            blogTitle={service.blogTitle}
                             imageLink={service.imageLink}
+                            createdAt={service.createdAt}
                         />
                     ))}
                 </div>}
