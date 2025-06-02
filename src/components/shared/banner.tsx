@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '../ui/button'
 
-export default function HomeBanner() {
+export default function Banner() {
     return (
         <section className='text-white'
             style={{
