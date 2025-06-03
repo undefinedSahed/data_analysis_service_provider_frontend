@@ -42,6 +42,7 @@ export default function Services() {
                             serviceTitle={service.serviceTitle}
                             serviceDescription={service.serviceDescription}
                             imageLink={service.imageLink}
+                            serviceId={service._id}
                         />
                     ))}
                 </div>}

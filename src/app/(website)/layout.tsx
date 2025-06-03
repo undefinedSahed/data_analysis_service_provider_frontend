@@ -3,6 +3,8 @@ import { Manrope } from "next/font/google";
 import "../globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import LayoutVisibilityWrapper from "@/providers/layout-visibility-wraper";
+import { Toaster } from "sonner";
+import SessionWrapper from "@/providers/session-wrapper";
 
 const manrope = Manrope({
   weight: ["400", "500", "600", "700"],
@@ -24,11 +26,14 @@ export default function RootLayout({
       <body
         className={`${manrope.className} antialiased`}
       >
-        <QueryProvider>
-          <LayoutVisibilityWrapper>
-            {children}
-          </LayoutVisibilityWrapper>
-        </QueryProvider>
+        <SessionWrapper>
+          <QueryProvider>
+            <LayoutVisibilityWrapper>
+              {children}
+              <Toaster position="top-right" />
+            </LayoutVisibilityWrapper>
+          </QueryProvider>
+        </SessionWrapper>
       </body>
     </html>
   );

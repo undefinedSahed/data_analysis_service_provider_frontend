@@ -1,4 +1,5 @@
 "use client"
+
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -7,6 +8,10 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import Link from "next/link"
 import Image from "next/image"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
+import { useState } from "react"
 
 const formSchema = z
     .object({
@@ -14,7 +19,14 @@ const formSchema = z
         password: z.string().min(6, { message: "Password must be at least 8 characters" })
     })
 
+type LoginFormValues = z.infer<typeof formSchema>;
+
 export default function LoginForm() {
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const router = useRouter();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -23,11 +35,30 @@ export default function LoginForm() {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
-    }
+    const onSubmit = async (values: LoginFormValues) => {
+        setIsLoading(true);
+
+        try {
+            const result = await signIn("credentials", {
+                redirect: false,
+                email: values.email,
+                password: values.password,
+            });
+
+            if (!result?.error) {
+                toast.success("You have been logged in successfully");
+                router.push("/");
+            } else {
+                toast.error(result.error || "Failed to login");
+            }
+        } catch (error) {
+            toast.error("An unexpected error occurred");
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
 
     return (
         <section>
@@ -36,7 +67,7 @@ export default function LoginForm() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
                         {/* Left side - Blue div (hidden on small screens) */}
                         <div className="relative hidden lg:block min-h-[600px]">
-                            <Image 
+                            <Image
                                 src="/images/auth.png"
                                 alt="Authentication Image"
                                 fill
@@ -86,8 +117,8 @@ export default function LoginForm() {
                                             </Link>
                                         </div>
 
-                                        <Button type="submit" className="w-full bg-[#00A3E1] hover:bg-[#0089c1] text-white py-2">
-                                            Login
+                                        <Button disabled={isLoading} type="submit" className="w-full bg-[#00A3E1] hover:bg-[#0089c1] text-white py-2">
+                                            {isLoading ? "Loading..." : "Login"}
                                         </Button>
 
                                         <div className="text-center mt-6">

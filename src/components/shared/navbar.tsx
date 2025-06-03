@@ -71,15 +71,19 @@ export default function Navbar() {
                                     </div>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem>Log In</DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link href="/login">Log In</Link>
+                                    </DropdownMenuItem>
                                     <DropdownMenuItem className="cursor-pointer">
                                         <Link href="/signup">Sign Up</Link>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
-                            <Button className="bg-[#38B1EA] hover:bg-cyan-600 text-white px-6 py-2 rounded-md font-medium">
-                                Strategy session
-                            </Button>
+                            <Link href="/strategy-solution">
+                                <Button className="bg-[#38B1EA] hover:bg-cyan-600 text-white px-6 py-2 rounded-md font-medium">
+                                    Strategy session
+                                </Button>
+                            </Link>
                         </div>
 
                         {/* Mobile/Tablet menu button - Now shows on tablets too */}
@@ -107,9 +111,11 @@ export default function Navbar() {
                                             )
                                         })}
                                         <div className="pt-4 border-t">
-                                            <Button className="w-full bg-[#38B1EA] hover:bg-cyan-600 text-white mb-4">
-                                                Strategy session
-                                            </Button>
+                                            <Link href="/strategy-solution">
+                                                <Button className="w-full bg-[#38B1EA] hover:bg-cyan-600 text-white mb-4">
+                                                    Strategy session
+                                                </Button>
+                                            </Link>
                                             <div className="space-y-2">
                                                 <Button variant="ghost" className="w-full justify-start">
                                                     <Link href="/login" className="w-full text-left">
