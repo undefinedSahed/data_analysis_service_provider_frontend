@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function registerUser(userData: any) {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/create`, {
@@ -22,6 +23,7 @@ export async function registerUser(userData: any) {
             message: data.message,
         };
     } catch (error) {
+        console.error("Registration error:", error);
         return {
             success: false,
             message: "Something went wrong. Please try again.",

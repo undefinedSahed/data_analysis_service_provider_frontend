@@ -1,9 +1,8 @@
 import type React from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Layers, FolderOpen, Snowflake, Hexagon } from "lucide-react"
+import { Layers, Snowflake } from "lucide-react"
 import { SiMysql, SiGooglebigquery } from "react-icons/si";
 import { BiLogoPostgresql } from "react-icons/bi";
-import { DiMsqlServer } from "react-icons/di";
 import AmazonS3 from "../../../public/images/amazons3.png"
 import AzureSynapse from "../../../public/images/azure_synapse.png"
 import AzureData from "../../../public/images/azure_data.png"

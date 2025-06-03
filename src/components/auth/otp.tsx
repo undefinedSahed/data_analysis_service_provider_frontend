@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { verifyOTP } from "@/app/actions/auth"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+// import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
     otp: z.string().length(6, { message: "OTP must be exactly 6 digits" }).regex(/^\d+$/, { message: "OTP must contain only numbers" }),
@@ -20,7 +20,7 @@ export default function VerifyOTPForm() {
     const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""])
     const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
-    const router = useRouter()
+    // const router = useRouter()
 
     const searchParams = new URLSearchParams(window.location.search)
     const email = searchParams.get("email")

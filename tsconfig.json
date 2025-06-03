@@ -26,6 +26,12 @@
     "types": [
       "next-auth"
     ] // Enables custom next-auth typings
+    ,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
