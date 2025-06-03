@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 
 const logos = [
@@ -16,15 +15,10 @@ const logos = [
     "/images/cl10.png",
 ];
 
-export default function ClientCompanies() {
-
-    const session = useSession()
-
-    console.log(session)
-
+export default function ServiceClients() {
     return (
-        <div className="overflow-hidden w-full bg-white py-8 lg:py-20">
-            <h2 className="text-center pb-4 lg:pb-12 text-xl lg:text-4xl font-bold">More Than 200+ Company Trusted Us</h2>
+        <div className="overflow-hidden w-full bg-[#EBF7FD] py-8 lg:py-20 my-8 lg:my-20">
+            <h2 className="text-center pb-4 lg:pb-12 text-xl lg:text-4xl font-bold lg:max-w-xl mx-auto text-[#424242]">More Than 200+ Data Driven Company Trusted Us</h2>
             <div className="flex animate-scroll gap-6 w-max">
                 {[...logos, ...logos].map((src, i) => (
                     <div

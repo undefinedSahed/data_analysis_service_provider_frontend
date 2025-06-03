@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "esnext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -16,19 +17,19 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "baseUrl": ".", // Enables support for path aliases
     "paths": {
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": [
+      "next-auth"
+    ] // Enables custom next-auth typings
   },
   "include": [
     "next-env.d.ts",
+    "types/**/*.d.ts", // Include custom types like next-auth.d.ts
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"

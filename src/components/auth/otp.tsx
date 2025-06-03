@@ -5,21 +5,31 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
+import { verifyOTP } from "@/app/actions/auth"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
-    otp: z.string().length(6, { message: "OTP must be exactly 6 digits" }).regex(/^\d+$/, { message: "OTP must contain only numbers" })
+    otp: z.string().length(6, { message: "OTP must be exactly 6 digits" }).regex(/^\d+$/, { message: "OTP must contain only numbers" }),
+    email: z.string().email({ message: "Please enter a valid email address" })
 })
 
 export default function VerifyOTPForm() {
     const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""])
     const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
+    const router = useRouter()
+
+    const searchParams = new URLSearchParams(window.location.search)
+    const email = searchParams.get("email")
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            otp: ""
+            otp: "",
+            email: ""
         },
     })
 
@@ -46,8 +56,25 @@ export default function VerifyOTPForm() {
         }
     }
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    useEffect(() => {
+        if (email) {
+            form.setValue("email", email);
+        }
+    }, [email, form]);
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+
+        const res = await verifyOTP(values)
+
+        if (res.success) {
+            toast.success("OTP Verified Successfully");
+            // Redirect to login or a confirmation page
+            // router.push(`/reset-password?email=${values.email}`);
+        } else {
+            toast.error(res.message || "Failed to send reset email");
+        }
+
+        console.log(res)
     }
 
     return (
