@@ -14,7 +14,7 @@ export default function page() {
             <Services />
             <AboutSolution />
             <Solutions />
-            <BlogForSolutionPage />
+            {/* <BlogForSolutionPage /> */}
         </main>
     )
 }
