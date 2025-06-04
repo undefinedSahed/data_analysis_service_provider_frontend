@@ -31,56 +31,17 @@ export async function registerUser(userData: any) {
     }
 }
 
-export async function loginUser(credentials: {
-    email: string;
-    password: string;
-}) {
+
+
+export async function verifyOTP(verificationData: { otp: string }, token: string | null) {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/verify-email`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `${token}`,
             },
-            body: JSON.stringify(credentials),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok || !data.success) {
-            return {
-                success: false,
-                message: data.message || "Login failed",
-            };
-        }
-
-        // Don't set cookies manually - let NextAuth handle this
-        return {
-            success: true,
-            data: data.user,
-            token: data.token,
-        };
-    } catch (error) {
-        console.error("Login error:", error);
-        return {
-            success: false,
-            message: "An error occurred during login",
-        };
-    }
-}
-
-// ... rest of your functions remain the same
-
-export async function verifyOTP(verificationData: {
-    otp: string;
-    email: string;
-}) {
-    try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify-token`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(verificationData),
+            body: JSON.stringify(verificationData)
         });
 
         const data = await response.json();

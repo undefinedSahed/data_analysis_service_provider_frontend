@@ -10,6 +10,8 @@ import Image from "next/image"
 import { toast } from "sonner"
 import { registerUser } from "@/app/actions/auth"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { Loader2 } from "lucide-react"
 
 const formSchema = z
     .object({
@@ -28,6 +30,8 @@ const formSchema = z
 
 export default function SignupForm() {
 
+    const [loading, setLoading] = useState(false);
+
     const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -44,15 +48,17 @@ export default function SignupForm() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoading(true);
         const result = await registerUser(values);
 
         if (result.success) {
             toast.success(result.message || "User registered successfully!");
             form.reset();
-            router.push("/login");
+            router.push(`/verify-otp?token=${result?.data?.accessToken}`);
         } else {
             toast.error(result.message);
         }
+        setLoading(false);
     }
 
 
@@ -181,7 +187,8 @@ export default function SignupForm() {
 
 
 
-                                        <Button type="submit" className="w-full bg-[#00A3E1] hover:bg-[#0089c1] text-white py-2">
+                                        <Button disabled={loading} type="submit" className="w-full bg-[#00A3E1] hover:bg-[#0089c1] text-white py-2">
+                                            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                             Sign Up
                                         </Button>
 
