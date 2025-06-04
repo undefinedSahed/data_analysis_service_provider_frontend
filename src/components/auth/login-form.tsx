@@ -45,11 +45,11 @@ export default function LoginForm() {
                 password: values.password,
             });
 
-            if (!result?.error) {
+            if (result?.error) {
+                toast.error(result.error);
+            } else {
                 toast.success("You have been logged in successfully");
                 router.push("/");
-            } else {
-                toast.error(result.error || "Failed to login");
             }
         } catch (error) {
             toast.error("An unexpected error occurred");

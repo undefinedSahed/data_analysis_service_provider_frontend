@@ -77,6 +77,9 @@ export default function Navbar() {
                                     <DropdownMenuItem className="cursor-pointer">
                                         <Link href="/signup">Sign Up</Link>
                                     </DropdownMenuItem>
+                                    <DropdownMenuItem className="cursor-pointer">
+                                        <Link href="/account">Account</Link>
+                                    </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                             <Link href="/strategy-solution">

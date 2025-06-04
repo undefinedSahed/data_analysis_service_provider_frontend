@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { loginUser } from "@/app/actions/auth";
 
 const handler = NextAuth({
     providers: [
@@ -15,28 +14,40 @@ const handler = NextAuth({
                     throw new Error("Email and password are required");
                 }
 
-                const result = await loginUser({
-                    email: credentials.email,
-                    password: credentials.password,
-                });
+                try {
+                    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(credentials),
+                    });
 
-                if (!result?.success) {
-                    return (result.message || "Invalid credentials");
+                    const data = await response.json();
+
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.message || "Invalid email or password");
+                    }
+
+                    const user = data.data.user;
+
+                    return {
+                        id: user._id,
+                        name: `${user.firstName} ${user.lastName}`,
+                        email: user.email,
+                        image: user.imageLink || null,
+                        role: user.role,
+                        accessToken: data.data.accessToken,
+                    };
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                } catch (error: any) {
+                    console.error("Login error:", error);
+                    throw new Error(error.message || "An unexpected error occurred");
                 }
-
-                const user = result?.data?.isExistingUser;
-
-                return {
-                    id: user?._id,
-                    name: `${user?.firstName} ${user?.lastName}`,
-                    email: user?.email,
-                    image: user?.imageLink || null,
-                    role: user?.role,
-                    accessToken: result.token,
-                };
             },
         }),
     ],
+
     pages: {
         signIn: "/login",
         signOut: "/logout",
