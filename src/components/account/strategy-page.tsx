@@ -8,7 +8,7 @@ import { Loader2 } from "lucide-react"
 export default function StrategySolutionsPage() {
 
     const { data: userStrategies, isLoading, isError, error } = useQuery({
-        queryKey: ['userPayments'],
+        queryKey: ['userStrategies'],
         queryFn: fetchUserStrategies,
         select: (data) => data.data
     })

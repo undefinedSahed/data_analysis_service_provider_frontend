@@ -15,12 +15,13 @@ export interface BlogType {
 
 export default function BlogForSolutionPage() {
 
-    const { data: blogs, isLoading, isError, error } = useQuery({
+    const { data: blogs, isLoading, isError, error } = useQuery<{ data: BlogType[] }>({
         queryKey: ['blogs'],
         queryFn: fetchBlogs,
         select: selectedBlog => selectedBlog.data.slice(0, 4)
     })
 
+    console.log(blogs)
 
 
     return (
