@@ -44,7 +44,7 @@ export function PaymentTable({ payments, totalPages, perPage, totalItems }: Paym
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {payments.map((payment) => (
+                    {payments?.map((payment) => (
                         <TableRow key={payment.id}>
                             <TableCell>
                                 <span className="text-gray-900">{payment.service}</span>

@@ -55,6 +55,22 @@ export async function updateUserProfile(data: any, image?: File) {
   }
 }
 
+
+// Update user password
+export async function updatePassword(data: { currentPassword: string; newPassword: string }) {
+  try {
+    const response = await api.post("/auth/change-password", data)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message || "Failed to update password")
+  }
+}
+
+
+
+
+
+
 // Services API
 export async function fetchServices(page = 1, limit = 10) {
   try {
@@ -193,6 +209,8 @@ export async function fetchStrategies(page = 1, limit = 10) {
   }
 }
 
+
+// Fetch a specific strategy
 export async function fetchStrategy(id: string) {
   try {
     const response = await api.get(`/strategy/${id}`)
@@ -202,6 +220,8 @@ export async function fetchStrategy(id: string) {
   }
 }
 
+
+// Update a specific strategy
 export async function updateStrategy(id: string, data: any) {
   try {
     const response = await api.put(`/strategy/${id}`, data)
@@ -210,6 +230,18 @@ export async function updateStrategy(id: string, data: any) {
     throw new Error(error.message || "Failed to update strategy")
   }
 }
+
+
+// Get user Strategies
+export async function fetchUserStrategies() {
+  try {
+    const response = await api.get(`/strategy/my-strategy`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch user strategies")
+  }
+}
+
 
 export async function deleteStrategy(id: string) {
   try {
@@ -226,5 +258,18 @@ export async function createStrategy(data: any) {
     return response.data
   } catch (error: any) {
     throw new Error(error.message || "Failed to create strategy")
+  }
+}
+
+
+
+// Payment API
+
+export async function fetchUserPayments() {
+  try {
+    const response = await api.get(`/payment/my-payments`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch payments")
   }
 }

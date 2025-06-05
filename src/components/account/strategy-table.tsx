@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Eye, Trash2 } from "lucide-react"
 import { CustomPagination } from "../shared/pagination"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useSession } from "next-auth/react"
 
 interface StrategySolution {
     id: number
@@ -34,10 +33,6 @@ export function StrategyTable({ strategySolutions, totalPages, perPage, totalIte
         console.log(`Fetching page ${page}`)
     }
 
-    const session = useSession()
-
-    console.log(session)
-
     return (
         <div className="border border-gray-200 rounded-lg overflow-hidden">
             <Table>
@@ -52,7 +47,7 @@ export function StrategyTable({ strategySolutions, totalPages, perPage, totalIte
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {strategySolutions.map((item) => (
+                    {strategySolutions?.map((item) => (
                         <TableRow key={item.id}>
                             <TableCell>
                                 <div className="text-sm">
