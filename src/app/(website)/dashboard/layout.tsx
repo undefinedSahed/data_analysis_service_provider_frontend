@@ -2,7 +2,6 @@ import type React from "react"
 import { Inter } from "next/font/google"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { DashboardSidebar } from "../../../components/dashboard/dashboard-sidebar"
-import { Toaster } from "sonner"
 import { DashboardHeader } from "../../../components/dashboard/dashboard-header"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -29,7 +28,7 @@ export default function DashboardLayout({
             <main className="md:ml-[15px]">{children}</main>
           </div>
         </div>
-        <Toaster />
+
       </SidebarProvider>
     </div>
   )

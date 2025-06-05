@@ -10,10 +10,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { Upload, Save } from "lucide-react"
 import Image from "next/image"
+import { RichTextEditor } from "@/components/dashboard/rich-text-editor"
 
 export default function AddBlogPage() {
   const router = useRouter()
@@ -35,9 +35,13 @@ export default function AddBlogPage() {
     },
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleDescriptionChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, blogDescription: value }))
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,16 +94,14 @@ export default function AddBlogPage() {
               </div>
 
               <div>
-                <Label htmlFor="blogDescription">Description</Label>
-                <Textarea
-                  id="blogDescription"
-                  name="blogDescription"
-                  placeholder="Type Blog description here..."
-                  rows={8}
-                  value={formData.blogDescription}
-                  onChange={handleInputChange}
-                  required
-                />
+                <Label htmlFor="blogDescription">Blog Content</Label>
+                <div className="mt-2">
+                  <RichTextEditor
+                    value={formData.blogDescription}
+                    onChange={handleDescriptionChange}
+                    placeholder="Write your blog content here..."
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
