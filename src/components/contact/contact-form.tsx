@@ -5,42 +5,32 @@ import { useForm } from "react-hook-form"
 import { useMutation } from "@tanstack/react-query"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  company: z.string().min(2, {
-    message: "Company name must be at least 2 characters.",
+  subject: z.string().min(2, {
+    message: "Subject must be at least 2 characters.",
   }),
-  focusArea: z.string({
-    required_error: "Please select a focus area.",
-  }),
-  notes: z.string().min(10, {
-    message: "Notes must be at least 10 characters.",
+  message: z.string().min(10, {
+    message: "Message must be at least 10 characters.",
   }),
 })
 
 type FormData = z.infer<typeof formSchema>
 
 export function ContactForm() {
-
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
       email: "",
-      company: "",
-      focusArea: "",
-      notes: "",
+      subject: "",
+      message: "",
     },
   })
 
@@ -53,8 +43,8 @@ export function ContactForm() {
         },
         body: JSON.stringify({
           email: data.email,
-          subject: `Contact Form: ${data.focusArea} - ${data.company}`,
-          message: `Name: ${data.name}\nCompany: ${data.company}\nFocus Area: ${data.focusArea}\n\nMessage:\n${data.notes}`,
+          subject: data.subject,
+          message: data.message,
         }),
       })
 
@@ -65,13 +55,11 @@ export function ContactForm() {
       return response.json()
     },
     onSuccess: () => {
-      toast.success("Your message has been sent successfully.",
-      )
+      toast.success("Your message has been sent successfully.")
       form.reset()
     },
     onError: () => {
-      toast.error("Failed to send message. Please try again.",
-       )
+      toast.error("Failed to send message. Please try again.")
     },
   })
 
@@ -81,37 +69,18 @@ export function ContactForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-900 font-medium">Name</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter your full name"
-                  {...field}
-                  className="h-12 border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-900 font-medium">Email Address</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Enter your email address"
+                  placeholder="Email address"
                   type="email"
                   {...field}
-                  className="h-12 border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500"
+                  className="h-12 border-gray-200 rounded-md focus:border-cyan-400 focus:ring-cyan-400"
                 />
               </FormControl>
               <FormMessage />
@@ -121,15 +90,14 @@ export function ContactForm() {
 
         <FormField
           control={form.control}
-          name="company"
+          name="subject"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-900 font-medium">Company Name</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Enter your Company Name"
+                  placeholder="Subject"
                   {...field}
-                  className="h-12 border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500"
+                  className="h-12 border-gray-200 rounded-md focus:border-cyan-400 focus:ring-cyan-400"
                 />
               </FormControl>
               <FormMessage />
@@ -139,40 +107,13 @@ export function ContactForm() {
 
         <FormField
           control={form.control}
-          name="focusArea"
+          name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-900 font-medium">Data Strategy Focus Area</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="h-12 border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500">
-                    <SelectValue placeholder="Select an option" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="analytics">Data Analytics</SelectItem>
-                  <SelectItem value="governance">Data Governance</SelectItem>
-                  <SelectItem value="architecture">Data Architecture</SelectItem>
-                  <SelectItem value="migration">Data Migration</SelectItem>
-                  <SelectItem value="visualization">Data Visualization</SelectItem>
-                  <SelectItem value="ml">Machine Learning</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-900 font-medium">Data Strategy Notes & Requests</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Write......."
-                  className="min-h-[120px] border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500 resize-none"
+                  placeholder="Ask your Queries"
+                  className="min-h-[120px] border-gray-200 rounded-md focus:border-cyan-400 focus:ring-cyan-400 resize-none"
                   {...field}
                 />
               </FormControl>
@@ -184,9 +125,9 @@ export function ContactForm() {
         <Button
           type="submit"
           disabled={mutation.isPending}
-          className="bg-sky-400 hover:bg-sky-500 text-white font-medium py-3 px-8 rounded-md h-12 text-base"
+          className="w-full bg-cyan-400 hover:bg-cyan-500 text-white font-medium py-3 px-8 rounded-md h-12 text-base"
         >
-          {mutation.isPending ? "Sending..." : "Let's Talk Data"}
+          {mutation.isPending ? "Sending..." : "Submit"}
         </Button>
       </form>
     </Form>
