@@ -8,7 +8,6 @@ interface Blog {
   blogDescription: string
   imageLink: string
   createdAt: string
-  updatedAt: string
 }
 
 interface BlogCardProps {

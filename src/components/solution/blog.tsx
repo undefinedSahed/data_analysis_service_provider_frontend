@@ -4,24 +4,41 @@ import { fetchBlogs } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import React from 'react'
-import BlogCard from '../shared/blog-card'
+import { BlogCard } from '../shared/blog-card'
 
-export interface BlogType {
+
+interface BlogType {
     _id: string;
     blogTitle: string;
+    blogDescription: string;
     imageLink: string;
-    createdAt: string
+    createdAt: string;
 }
+
+export type BlogResponse = {
+    status: boolean;
+    message: string;
+    data: BlogType[];
+    meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    };
+};
+
 
 export default function BlogForSolutionPage() {
 
-    const { data: blogs, isLoading, isError, error } = useQuery<{ data: BlogType[] }>({
-        queryKey: ['blogs'],
-        queryFn: fetchBlogs,
-        select: selectedBlog => selectedBlog.data.slice(0, 4)
+    const { data: blogResponse, isLoading, isError, error } = useQuery<BlogResponse, Error, BlogResponse, [string, number, number]>({
+        queryKey: ['blogs', 1, 4],
+        queryFn: ({ queryKey }) => {
+            const [, page, limit] = queryKey
+            return fetchBlogs(page, limit)
+        }
     })
 
-    console.log(blogs)
+    console.log(blogResponse?.data)
 
 
     return (
@@ -38,17 +55,13 @@ export default function BlogForSolutionPage() {
 
                 {isError && <div className='text-center'>Error: {error?.message}</div>}
 
-                {blogs && <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8 lg:gap-y-14">
-                    {blogs?.map((service: BlogType) => (
-                        <BlogCard
-                            key={service._id}
-                            blogTitle={service.blogTitle}
-                            imageLink={service.imageLink}
-                            createdAt={service.createdAt}
-                        />
-                    ))}
-                </div>}
-
+                {blogResponse && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8 lg:gap-y-14">
+                        {blogResponse.data.map((blog) => (
+                            <BlogCard key={blog._id} blog={blog} />
+                        ))}
+                    </div>
+                )}
             </div>
         </section>
     )

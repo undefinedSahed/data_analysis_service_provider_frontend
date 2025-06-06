@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { BlogResponse } from "@/components/solution/blog"
 import axios from "axios"
 import { getSession } from "next-auth/react"
+import { a } from "node_modules/@tanstack/react-query-devtools/build/modern/ReactQueryDevtools-Cn7cKi7o"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -13,7 +15,6 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     const session = await getSession()
-    console.log("SESSION:", session)
     if (session?.user?.accessToken) {
       config.headers.Authorization = `${session.user.accessToken}`
     } else {
@@ -68,6 +69,34 @@ export async function updatePassword(data: { currentPassword: string; newPasswor
 
 
 
+// Solutions API
+export async function fetchSolutions() {
+  try {
+    const response = await api.get(`/solution/get`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch solutions")
+  }
+}
+
+
+// Needed staff API
+
+// Needed staff API
+export async function createStaffingNeed(data: {
+  firstName: string
+  lastName: string
+  companyName: string
+  businessEmail: string
+  staffDescription: string
+}) {
+  try {
+    const response = await api.post("/needed-staff/create", data)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to create staffing need")
+  }
+}
 
 
 
@@ -136,13 +165,9 @@ export async function deleteService(id: string) {
 }
 
 // Blog API
-export async function fetchBlogs(page = 1, limit = 10) {
-  try {
-    const response = await api.get(`/blog/get?page=${page}&limit=${limit}`)
-    return response.data
-  } catch (error: any) {
-    throw new Error(error.message || "Failed to fetch blogs")
-  }
+export async function fetchBlogs(page = 1, limit = 10): Promise<BlogResponse> {
+  const response = await api.get(`/blog/get?page=${page}&limit=${limit}`)
+  return response.data
 }
 
 export async function fetchBlog(id: string) {
@@ -264,6 +289,29 @@ export async function createStrategy(data: any) {
 
 
 // Payment API
+
+export async function createPayment(data: any) {
+  try {
+    const response = await api.post("/payment/create-payment", data)
+    const result = await response.data
+    return result
+  } catch (error) {
+    console.error("Error creating payment:", error)
+    throw error
+  }
+}
+
+
+// Payment Status API
+export async function fetchPaymentStatus(data: any) {
+  try {
+    const response = await api.post(`/payment/confirm-payment`, data)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch payment status")
+  }
+}
+
 
 export async function fetchUserPayments() {
   try {
