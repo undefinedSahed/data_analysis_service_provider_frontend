@@ -64,7 +64,7 @@ export function CustomPagination({ currentPage, totalPages, perPage, totalItems,
 
     return (
         <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 hidden md:block">
                 Showing {startItem} to {endItem} of {totalItems} results
             </div>
 

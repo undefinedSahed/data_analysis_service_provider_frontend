@@ -60,7 +60,7 @@ export default function FAQSection() {
                     collapsible
                     value={openItem}
                     onValueChange={setOpenItem}
-                    className="space-y-2"
+                    className="space-y-2 lg:max-w-5xl mx-auto"
                     defaultValue="item-1"
                 >
                     {faqData.map((faq) => (

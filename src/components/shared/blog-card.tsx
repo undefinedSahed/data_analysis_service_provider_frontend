@@ -1,52 +1,63 @@
-import { Calendar, User } from 'lucide-react'
-import Image from 'next/image'
-import React from 'react'
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "lucide-react"
 
-export interface ServiceCardProps {
-    blogTitle: string
-    imageLink: string
-    createdAt: string
+interface Blog {
+  _id: string
+  blogTitle: string
+  blogDescription: string
+  imageLink: string
+  createdAt: string
 }
 
-export default function BlogCard({
-    blogTitle,
-    imageLink,
-    createdAt
-}: ServiceCardProps) {
+interface BlogCardProps {
+  blog: Blog
+}
 
-    function formatDate(dateStr: string) {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-        });
-    }
+export function BlogCard({ blog }: BlogCardProps) {
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    })
+  }
 
-    return (
-        <div className="rounded-md">
-            <Image
-                src={imageLink}
-                alt={blogTitle}
-                width={1000}
-                height={1000}
-                className='w-full aspect-[5/2] object-cover mx-auto rounded-md'
-            />
-            <div className="space-y-3 pt-4">
-                <div className="flex items-center gap-8">
-                    <div className="flex gap-2 items-center">
-                        <User className='h-6 w-6' />
-                        <h6>Admin</h6>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                        <Calendar className='h-6 w-6' />
-                        <h6>{formatDate(createdAt)}</h6>
-                    </div>
-                </div>
-                <h3 className='text-xl lg:text-4xl font-semibold capitalize'>
-                    {blogTitle}
-                </h3>
-            </div>
+  const truncateDescription = (text: string, maxLength = 120) => {
+    if (text?.length <= maxLength) return text
+    return text?.substring(0, maxLength) + "..."
+  }
+
+  return (
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group">
+      <div className="relative h-64 overflow-hidden">
+        <img
+          src={blog?.imageLink || "/placeholder.svg"}
+          alt={blog?.blogTitle}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+
+      <div className="p-6">
+        <div className="flex items-center text-sm text-gray-500 mb-3">
+          <Calendar className="w-4 h-4 mr-2" />
+          {formatDate(blog?.createdAt)}
         </div>
-    )
+
+        <h3 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight">{blog?.blogTitle}</h3>
+
+        <p className="text-gray-600 mb-6 leading-relaxed">{truncateDescription(blog?.blogDescription)}</p>
+
+        <Link href={`/blogs/${blog?._id}`}>
+          <Button
+            variant="outline"
+            className="w-full sm:w-auto border-2 border-cyan-400 text-cyan-600 hover:bg-cyan-400 hover:text-white transition-colors duration-200"
+          >
+            View Details
+          </Button>
+        </Link>
+      </div>
+    </div>
+  )
 }

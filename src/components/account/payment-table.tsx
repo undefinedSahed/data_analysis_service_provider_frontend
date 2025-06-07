@@ -7,12 +7,16 @@ import { CustomPagination } from "../shared/pagination"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 interface Payment {
-    id: number
+    _id: number
     service: string
-    total: string
+    amount: string
     paymentMethod: string
     date: string
     time: string
+    serviceId: {
+        serviceTitle: string
+    }
+    createdAt: string
 }
 
 interface PaymentTableProps {
@@ -31,12 +35,14 @@ export function PaymentTable({ payments, totalPages, perPage, totalItems }: Paym
         console.log(`Fetching page ${page}`)
     }
 
+    console.log(payments)
+
     return (
         <div className="border border-gray-200 rounded-lg overflow-hidden">
             <Table>
                 <TableHeader className="bg-gray-50">
                     <TableRow>
-                        <TableHead>Service</TableHead>
+                        <TableHead className="text-center">Service</TableHead>
                         <TableHead className="text-center">Total</TableHead>
                         <TableHead className="text-center">Payment Method</TableHead>
                         <TableHead className="text-center">Time</TableHead>
@@ -44,21 +50,27 @@ export function PaymentTable({ payments, totalPages, perPage, totalItems }: Paym
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {payments.map((payment) => (
-                        <TableRow key={payment.id}>
-                            <TableCell>
-                                <span className="text-gray-900">{payment.service}</span>
+                    {payments?.map((payment) => (
+                        <TableRow key={payment._id}>
+                            <TableCell className="text-center">
+                                <span className="text-gray-900">{payment.serviceId.serviceTitle}</span>
                             </TableCell>
                             <TableCell className="text-center">
-                                <span className="text-gray-900">{payment.total}</span>
+                                <span className="text-gray-900">${payment.amount}</span>
                             </TableCell>
                             <TableCell className="text-center">
-                                <span className="text-gray-600">{payment.paymentMethod}</span>
+                                <span className="text-gray-600">Stripe</span>
                             </TableCell>
                             <TableCell className="text-center">
                                 <div className="text-sm text-gray-600">
-                                    <div>{payment.date}</div>
-                                    <div>{payment.time}</div>
+                                    {new Date(payment.createdAt).toLocaleString("en-GB", {
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        hour12: true,
+                                    }).replace(",", " |")}
                                 </div>
                             </TableCell>
                             <TableCell className="text-center">
