@@ -30,10 +30,8 @@ export default function StrategyForm() {
 
         try {
             const result = await createStrategy(formData)
-            console.log("Strategy created successfully:", result)
             setSubmitMessage("Strategy created successfully!")
 
-            // Reset form after successful submission
             setFormData({
                 name: "",
                 email: "",
@@ -56,8 +54,11 @@ export default function StrategyForm() {
 
     return (
         <div className="py-8 lg:py-20 px-4 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="text-center">
+                <h3 className="text-xl lg:text-4xl text-[#424242] font-bold pb-10 capitalize">Solution Book</h3>
+            </div>
+            <div className="max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                     {/* Form Section */}
                     <div className="order-2 lg:order-1">
                         <Card className="border-none shadow-none">
@@ -176,22 +177,22 @@ export default function StrategyForm() {
                             </p>
 
                             <ul className="space-y-6 list-disc list-inside text-base font-medium text-[#545454]">
-                                <li className="text-justify lg:text-start">
+                                <li className="text-justify">
                                     <span className="lg:text-[22px] text-lg">Lorem ipsum:</span> Lorem ipsum dolor sit amet, consectetur
                                     adipiscing elit. Sed eget euismod velit. Ut dapibus est urna. Suspendisse dictum facilisis
                                     ullamcorper. Maecenas vitae efficitur tortor, in placerat dui.
                                 </li>
 
-                                <li className="text-justify lg:text-start">
+                                <li className="text-justify">
                                     <span className="lg:text-[22px] text-lg">Lorem ipsum:</span> Lorem ipsum dolor sit amet, consectetur
                                     adipiscing elit. Sed eget euismod velit. Ut dapibus est urna. Suspendisse dictum facilisis
                                     ullamcorper. Maecenas vitae efficitur tortor, in placerat dui.
                                 </li>
 
-                                <li className="text-justify lg:text-start">
-                                    <span className="lg:text-[22px] text-lg">Lorem ipsum:</span> Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit. Sed eget euismod velit. Ut dapibus est urna. Suspendisse dictum facilisis
-                                    ullamcorper. Maecenas vitae efficitur tortor, in placerat dui.
+                                <li className="text-justify">
+                                    <span className="lg:text-[22px] text-lg">Lorem ipsum:</span> <span>Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit. Sed eget euismod velit. Ut dapibus est urna. Suspendisse dictum facilisis
+                                        ullamcorper. Maecenas vitae efficitur tortor, in placerat dui.</span>
                                 </li>
                             </ul>
                         </div>

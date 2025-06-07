@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { BlogResponse } from "@/components/solution/blog"
 import axios from "axios"
 import { getSession } from "next-auth/react"
+import { a } from "node_modules/@tanstack/react-query-devtools/build/modern/ReactQueryDevtools-Cn7cKi7o"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -13,7 +15,6 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     const session = await getSession()
-    console.log("SESSION:", session)
     if (session?.user?.accessToken) {
       config.headers.Authorization = `${session.user.accessToken}`
     } else {
@@ -54,6 +55,50 @@ export async function updateUserProfile(data: any, image?: File) {
     throw new Error(error.message || "Failed to update user profile")
   }
 }
+
+
+// Update user password
+export async function updatePassword(data: { currentPassword: string; newPassword: string }) {
+  try {
+    const response = await api.post("/auth/change-password", data)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message || "Failed to update password")
+  }
+}
+
+
+
+// Solutions API
+export async function fetchSolutions() {
+  try {
+    const response = await api.get(`/solution/get`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch solutions")
+  }
+}
+
+
+// Needed staff API
+
+// Needed staff API
+export async function createStaffingNeed(data: {
+  firstName: string
+  lastName: string
+  companyName: string
+  businessEmail: string
+  staffDescription: string
+}) {
+  try {
+    const response = await api.post("/needed-staff/create", data)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to create staffing need")
+  }
+}
+
+
 
 // Services API
 export async function fetchServices(page = 1, limit = 10) {
@@ -120,13 +165,9 @@ export async function deleteService(id: string) {
 }
 
 // Blog API
-export async function fetchBlogs(page = 1, limit = 10) {
-  try {
-    const response = await api.get(`/blog/get?page=${page}&limit=${limit}`)
-    return response.data
-  } catch (error: any) {
-    throw new Error(error.message || "Failed to fetch blogs")
-  }
+export async function fetchBlogs(page = 1, limit = 10): Promise<BlogResponse> {
+  const response = await api.get(`/blog/get?page=${page}&limit=${limit}`)
+  return response.data
 }
 
 export async function fetchBlog(id: string) {
@@ -193,6 +234,8 @@ export async function fetchStrategies(page = 1, limit = 10) {
   }
 }
 
+
+// Fetch a specific strategy
 export async function fetchStrategy(id: string) {
   try {
     const response = await api.get(`/strategy/${id}`)
@@ -202,6 +245,8 @@ export async function fetchStrategy(id: string) {
   }
 }
 
+
+// Update a specific strategy
 export async function updateStrategy(id: string, data: any) {
   try {
     const response = await api.put(`/strategy/${id}`, data)
@@ -210,6 +255,18 @@ export async function updateStrategy(id: string, data: any) {
     throw new Error(error.message || "Failed to update strategy")
   }
 }
+
+
+// Get user Strategies
+export async function fetchUserStrategies() {
+  try {
+    const response = await api.get(`/strategy/my-strategy`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch user strategies")
+  }
+}
+
 
 export async function deleteStrategy(id: string) {
   try {
@@ -226,5 +283,41 @@ export async function createStrategy(data: any) {
     return response.data
   } catch (error: any) {
     throw new Error(error.message || "Failed to create strategy")
+  }
+}
+
+
+
+// Payment API
+
+export async function createPayment(data: any) {
+  try {
+    const response = await api.post("/payment/create-payment", data)
+    const result = await response.data
+    return result
+  } catch (error) {
+    console.error("Error creating payment:", error)
+    throw error
+  }
+}
+
+
+// Payment Status API
+export async function fetchPaymentStatus(data: any) {
+  try {
+    const response = await api.post(`/payment/confirm-payment`, data)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch payment status")
+  }
+}
+
+
+export async function fetchUserPayments() {
+  try {
+    const response = await api.get(`/payment/my-payments`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch payments")
   }
 }

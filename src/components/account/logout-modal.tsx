@@ -11,13 +11,13 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { signOut } from "next-auth/react"
 
 export function LogoutModal() {
     const [showLogoutModal, setShowLogoutModal] = useState(false)
 
     const handleLogout = () => {
-        // Handle logout logic here
-        console.log("User logged out")
+        signOut({ callbackUrl: "/" })
         setShowLogoutModal(false)
     }
 

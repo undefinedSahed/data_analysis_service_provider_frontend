@@ -1,10 +1,10 @@
-import StrategySolutionsPage from '@/components/account/strategy-page'
+import PaymentSuccess from '@/components/payment/payment-success-page'
 import React from 'react'
 
 export default function page() {
     return (
         <main>
-            <StrategySolutionsPage />
+            <PaymentSuccess />
         </main>
     )
 }

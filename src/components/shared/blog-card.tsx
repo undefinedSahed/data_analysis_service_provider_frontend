@@ -8,7 +8,6 @@ interface Blog {
   blogDescription: string
   imageLink: string
   createdAt: string
-  updatedAt: string
 }
 
 interface BlogCardProps {
@@ -26,16 +25,16 @@ export function BlogCard({ blog }: BlogCardProps) {
   }
 
   const truncateDescription = (text: string, maxLength = 120) => {
-    if (text.length <= maxLength) return text
-    return text.substring(0, maxLength) + "..."
+    if (text?.length <= maxLength) return text
+    return text?.substring(0, maxLength) + "..."
   }
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group">
       <div className="relative h-64 overflow-hidden">
         <img
-          src={blog.imageLink || "/placeholder.svg"}
-          alt={blog.blogTitle}
+          src={blog?.imageLink || "/placeholder.svg"}
+          alt={blog?.blogTitle}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
       </div>
@@ -43,14 +42,14 @@ export function BlogCard({ blog }: BlogCardProps) {
       <div className="p-6">
         <div className="flex items-center text-sm text-gray-500 mb-3">
           <Calendar className="w-4 h-4 mr-2" />
-          {formatDate(blog.createdAt)}
+          {formatDate(blog?.createdAt)}
         </div>
 
-        <h3 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight">{blog.blogTitle}</h3>
+        <h3 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight">{blog?.blogTitle}</h3>
 
-        <p className="text-gray-600 mb-6 leading-relaxed">{truncateDescription(blog.blogDescription)}</p>
+        <p className="text-gray-600 mb-6 leading-relaxed">{truncateDescription(blog?.blogDescription)}</p>
 
-        <Link href={`/blogs/${blog._id}`}>
+        <Link href={`/blogs/${blog?._id}`}>
           <Button
             variant="outline"
             className="w-full sm:w-auto border-2 border-cyan-400 text-cyan-600 hover:bg-cyan-400 hover:text-white transition-colors duration-200"

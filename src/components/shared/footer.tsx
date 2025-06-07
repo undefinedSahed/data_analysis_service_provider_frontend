@@ -62,8 +62,8 @@ export function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/about" className="text-[#E7E7E7] hover:text-[#E7E7E7] transition-colors duration-200">
-                                    About Us
+                                <Link href="/solution" className="text-[#E7E7E7] hover:text-[#E7E7E7] transition-colors duration-200">
+                                    Solution
                                 </Link>
                             </li>
                             <li>
@@ -79,13 +79,13 @@ export function Footer() {
                         <h3 className="text-xl pb-3 font-semibold">Support</h3>
                         <ul className="space-y-4">
                             <li>
-                                <Link href="/strategy" className="text-[#E7E7E7] hover:text-[#E7E7E7] transition-colors duration-200">
+                                <Link href="/strategy-solution" className="text-[#E7E7E7] hover:text-[#E7E7E7] transition-colors duration-200">
                                     Privacy Policy
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/digital" className="text-[#E7E7E7] hover:text-[#E7E7E7] transition-colors duration-200">
-                                    Terms Of Service
+                                <Link href="/account" className="text-[#E7E7E7] hover:text-[#E7E7E7] transition-colors duration-200">
+                                    Account
                                 </Link>
                             </li>
                             <li>
