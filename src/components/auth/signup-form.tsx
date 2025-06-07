@@ -5,21 +5,23 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-import { Checkbox } from "../ui/checkbox"
 import Link from "next/link"
 import Image from "next/image"
+import { toast } from "sonner"
+import { registerUser } from "@/app/actions/auth"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { Loader2 } from "lucide-react"
 
 const formSchema = z
     .object({
         firstName: z.string().min(2, { message: "Name must be at least 2 characters" }),
         lastName: z.string().min(2, { message: "Last name must be at least 2 characters" }),
+        companyName: z.string({ message: "Company name must be at least 2 characters" }),
         email: z.string().email({ message: "Please enter a valid email address" }),
-        phoneNumber: z.string().min(10, { message: "Phone number must be at least 10 characters" }),
+        phone: z.string().min(10, { message: "Phone number must be at least 10 characters" }),
         password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-        confirmPassword: z.string(),
-        termsAndConditions: z.boolean().refine((val) => val === true, {
-            message: "You must agree to the terms and conditions",
-        }),
+        confirmPassword: z.string()
     })
     .refine((data) => data.password === data.confirmPassword, {
         message: "Passwords do not match",
@@ -27,28 +29,43 @@ const formSchema = z
     })
 
 export default function SignupForm() {
+
+    const [loading, setLoading] = useState(false);
+
+    const router = useRouter();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             firstName: "",
             lastName: "",
+            companyName: "",
             email: "",
-            phoneNumber: "",
+            phone: "",
             password: "",
-            confirmPassword: "",
-            termsAndConditions: false,
+            confirmPassword: ""
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoading(true);
+        const result = await registerUser(values);
+
+        if (result.success) {
+            toast.success(result.message || "User registered successfully!");
+            form.reset();
+            router.push(`/verify-otp?token=${result?.data?.accessToken}`);
+        } else {
+            toast.error(result.message);
+        }
+        setLoading(false);
     }
+
+
 
     return (
         <section>
-            <div className="flex justify-center items-center min-h-screen">
+            <div className="flex justify-center items-center scale-90 max-h-screen">
                 <div className="w-full max-w-6xl shadow-[0px_0px_60px_0px_#00000040] rounded-lg overflow-hidden">
                     <div className="grid grid-cols-1 lg:grid-cols-2">
                         {/* Left side - Blue div (hidden on small screens) */}
@@ -74,7 +91,7 @@ export default function SignupForm() {
                                             name="firstName"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>Name</FormLabel>
+                                                    <FormLabel>First Name</FormLabel>
                                                     <FormControl>
                                                         <Input placeholder="Enter your first name" {...field} />
                                                     </FormControl>
@@ -88,7 +105,7 @@ export default function SignupForm() {
                                             name="lastName"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>Name</FormLabel>
+                                                    <FormLabel>Last Name</FormLabel>
                                                     <FormControl>
                                                         <Input placeholder="Enter your last name" {...field} />
                                                     </FormControl>
@@ -96,6 +113,21 @@ export default function SignupForm() {
                                                 </FormItem>
                                             )}
                                         />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="companyName"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Company Name</FormLabel>
+                                                    <FormControl>
+                                                        <Input placeholder="Enter your company name" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
 
                                         <FormField
                                             control={form.control}
@@ -113,7 +145,7 @@ export default function SignupForm() {
 
                                         <FormField
                                             control={form.control}
-                                            name="phoneNumber"
+                                            name="phone"
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel>Phone Number</FormLabel>
@@ -153,28 +185,10 @@ export default function SignupForm() {
                                             )}
                                         />
 
-                                        <FormField
-                                            control={form.control}
-                                            name="termsAndConditions"
-                                            render={({ field }) => (
-                                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-2">
-                                                    <FormControl>
-                                                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                                                    </FormControl>
-                                                    <div className="space-y-1 leading-none">
-                                                        <FormLabel className="font-normal">
-                                                            I agree to the{" "}
-                                                            <Link href="/terms" className="text-[#035F8A] hover:underline">
-                                                                Terms & Conditions
-                                                            </Link>
-                                                        </FormLabel>
-                                                        <FormMessage />
-                                                    </div>
-                                                </FormItem>
-                                            )}
-                                        />
 
-                                        <Button type="submit" className="w-full bg-[#00A3E1] hover:bg-[#0089c1] text-white py-2">
+
+                                        <Button disabled={loading} type="submit" className="w-full bg-[#00A3E1] hover:bg-[#0089c1] text-white py-2">
+                                            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                             Sign Up
                                         </Button>
 

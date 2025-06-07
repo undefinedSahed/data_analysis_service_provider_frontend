@@ -1,4 +1,5 @@
 "use client"
+
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -7,6 +8,10 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { useRef, useState } from "react"
 import Image from "next/image"
+import { verifyOTP } from "@/app/actions/auth"
+import { toast } from "sonner"
+import { useRouter, useSearchParams } from "next/navigation"
+// import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
     otp: z.string().length(6, { message: "OTP must be exactly 6 digits" }).regex(/^\d+$/, { message: "OTP must contain only numbers" })
@@ -15,6 +20,12 @@ const formSchema = z.object({
 export default function VerifyOTPForm() {
     const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""])
     const inputRefs = useRef<(HTMLInputElement | null)[]>([])
+    const [isLoading, setIsLoading] = useState(false)
+
+    const router = useRouter()
+
+    const searchParams = useSearchParams();
+    const token = searchParams.get('token')
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -46,8 +57,18 @@ export default function VerifyOTPForm() {
         }
     }
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        setIsLoading(true);
+        const res = await verifyOTP(values, token);
+
+        if (res.success) {
+            toast.success(res.message || "OTP verified successfully!");
+            router.push(`/login`);
+        } else {
+            toast.error(res.message || "Failed to send reset email");
+        }
+
+        setIsLoading(false);
     }
 
     return (
@@ -104,7 +125,7 @@ export default function VerifyOTPForm() {
                                         />
 
                                         <Button type="submit" className="w-full bg-[#00A3E1] hover:bg-[#0089c1] text-white py-2">
-                                            Verify
+                                            {isLoading ? "Verifying..." : "Verify OTP"}
                                         </Button>
                                     </form>
                                 </Form>

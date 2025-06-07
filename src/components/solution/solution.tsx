@@ -1,10 +1,10 @@
 "use client"
 
-import { fetchSolutions } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import React from 'react'
 import SolutionCard from './solution-card'
+import { fetchSolutions } from '@/lib/api'
 
 export interface SolutionType {
     _id: string;
@@ -19,8 +19,6 @@ export default function Solutions() {
         queryFn: fetchSolutions
     })
 
-    console.log(solutions)
-
     return (
         <section className='py-8 lg:py-20 bg-[#EBF7FD]'>
             <div className="container mx-auto">
@@ -32,6 +30,10 @@ export default function Solutions() {
                     <Loader2 className="h-16 w-16 animate-spin text-primary" />
                     <h4 className='text-2xl font-medium'>Loading</h4>
                 </div>}
+
+                {
+                    solutions?.data.length === 0 && <div className='text-center font-bold text-xl'>No solutions found</div>
+                }
 
                 {isError && <div className='text-center'>Error: {error?.message}</div>}
 

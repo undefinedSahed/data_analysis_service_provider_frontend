@@ -6,6 +6,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import Image from "next/image"
+import { forgotPassword } from "@/app/actions/auth"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 const formSchema = z
     .object({
@@ -13,6 +17,11 @@ const formSchema = z
     })
 
 export default function ForgotPasswordForm() {
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const router = useRouter();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -20,10 +29,19 @@ export default function ForgotPasswordForm() {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        setIsLoading(true);
+        const res = await forgotPassword(values.email);
+
+        if (res.success) {
+            toast.success("OTP Sent to your email");
+            router.push(`/verify-otp?email=${values.email}&token=${res?.data?.accessToken}`);
+            console.log(res)
+        } else {
+            toast.error(res.message || "Failed to send reset email");
+        }
+
+        setIsLoading(false);
     }
 
     return (
@@ -64,8 +82,8 @@ export default function ForgotPasswordForm() {
                                             )}
                                         />
 
-                                        <Button type="submit" className="w-full bg-[#00A3E1] hover:bg-[#0089c1] text-white py-2">
-                                            Send OTP
+                                        <Button disabled={isLoading} type="submit" className="w-full bg-[#00A3E1] hover:bg-[#0089c1] text-white py-2">
+                                            {isLoading ? "Sending OTP..." : "Send OTP"}
                                         </Button>
                                     </form>
                                 </Form>

@@ -13,6 +13,7 @@ const HIDDEN_ROUTES = [
     "/reset-password",
     "/verify",
     "/verify-otp",
+    "/dashboard"
 ];
 
 export default function LayoutVisibilityWrapper({

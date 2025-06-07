@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 
 const logos = [
@@ -16,6 +17,11 @@ const logos = [
 ];
 
 export default function ClientCompanies() {
+
+    const session = useSession()
+
+    console.log(session)
+
     return (
         <div className="overflow-hidden w-full bg-white py-8 lg:py-20">
             <h2 className="text-center pb-4 lg:pb-12 text-xl lg:text-4xl font-bold">More Than 200+ Company Trusted Us</h2>

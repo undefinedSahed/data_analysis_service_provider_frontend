@@ -8,6 +8,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { createStaffingNeed } from "@/lib/api"
+import { toast } from "sonner"
 
 const formSchema = z.object({
     firstName: z.string().min(2, {
@@ -16,13 +19,13 @@ const formSchema = z.object({
     lastName: z.string().min(2, {
         message: "Last name must be at least 2 characters.",
     }),
-    company: z.string().min(2, {
+    companyName: z.string().min(2, {
         message: "Company name must be at least 2 characters.",
     }),
     businessEmail: z.string().email({
         message: "Please enter a valid email address.",
     }),
-    staffingNeed: z.string().min(10, {
+    staffDescription: z.string().min(10, {
         message: "Please provide at least 10 characters describing your staffing need.",
     }),
 })
@@ -35,20 +38,27 @@ export default function StaffingNeedForm() {
         defaultValues: {
             firstName: "",
             lastName: "",
-            company: "",
+            companyName: "",
             businessEmail: "",
-            staffingNeed: "",
+            staffDescription: "",
+        },
+    })
+
+    const mutation = useMutation({
+        mutationFn: createStaffingNeed,
+        onSuccess: () => {
+            toast.success("Staffing need submitted successfully!")
+            form.reset()
+        },
+        onError: (error: any) => {
+            toast.error(error.message || "Failed to submit staffing need")
         },
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsSubmitting(true)
 
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 2000))
-
-        console.log(values)
-        alert("Form submitted successfully!")
+        mutation.mutate(values)
 
         setIsSubmitting(false)
         form.reset()
@@ -101,7 +111,7 @@ export default function StaffingNeedForm() {
                     {/* Company Field */}
                     <FormField
                         control={form.control}
-                        name="company"
+                        name="companyName"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel className="text-sm font-medium text-gray-700">Company</FormLabel>
@@ -140,7 +150,7 @@ export default function StaffingNeedForm() {
                     {/* Staffing Need Textarea */}
                     <FormField
                         control={form.control}
-                        name="staffingNeed"
+                        name="staffDescription"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel className="text-sm font-medium text-gray-700">
@@ -159,11 +169,11 @@ export default function StaffingNeedForm() {
                     />
 
                     {/* Submit Button with Avatar */}
-                    <div className="relative">
+                    <div className="flex items-center justify-center">
                         <Button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+                            className="w-44 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
                         >
                             {isSubmitting ? "Submitting..." : "Submit"}
                         </Button>
