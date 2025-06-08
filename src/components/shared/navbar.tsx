@@ -70,9 +70,9 @@ export default function Navbar() {
                                                     <Image
                                                         src={session.user.image || "/placeholder.svg"}
                                                         alt={session.user.name || "User"}
-                                                        width={32}
-                                                        height={32}
-                                                        className="rounded-full"
+                                                        width={80}
+                                                        height={80}
+                                                        className="h-10 w-10 rounded-full object-cover"
                                                     />
                                                 ) : (
                                                     <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center">
