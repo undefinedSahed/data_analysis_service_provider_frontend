@@ -22,7 +22,7 @@ interface Service {
     }
 }
 
-function CheckoutForm({ clientSecret }: { clientSecret: string }) {
+function CheckoutForm() {
     const stripe = useStripe()
     const elements = useElements()
     const router = useRouter()
@@ -60,8 +60,10 @@ function CheckoutForm({ clientSecret }: { clientSecret: string }) {
                 setMessage(`Payment status: ${paymentIntent?.status}`)
                 router.push(`/payment-cancel?paymentIntentId=${paymentIntent.id}`)
             }
-        } catch (error) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
             setMessage("An unexpected error occurred")
+            throw new Error("An unexpected error occurred: ", error)
             router.push("/payment-cancel")
         } finally {
             setLoading(false)
@@ -230,7 +232,7 @@ export default function CheckoutPage() {
 
                                 {clientSecret && session ? (
                                     <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: "stripe" } }}>
-                                        <CheckoutForm clientSecret={clientSecret} />
+                                        <CheckoutForm />
                                     </Elements>
                                 ) : !session ? (
                                     <p className="text-sm text-[#616161] mt-2">Please log in to continue with payment</p>

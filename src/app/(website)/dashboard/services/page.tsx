@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchServices, deleteService, updateService } from "@/lib/api"
@@ -35,6 +34,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function ServicesPage() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -191,6 +193,7 @@ export default function ServicesPage() {
         <CardContent className="pt-0">
           <div className="border-t border-gray-200 mb-4"></div>
           <div className="space-y-4">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {services.map((service: any) => (
               <div key={service._id} className="grid grid-cols-12 gap-4 items-center py-4 border-b last:border-b-0">
                 <div className="col-span-5 flex items-center gap-3">

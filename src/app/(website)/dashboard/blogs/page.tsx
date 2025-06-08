@@ -1,7 +1,9 @@
 "use client"
 
-import type React from "react"
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import type React from "react"
 import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchBlogs, deleteBlog, updateBlog } from "@/lib/api"
@@ -35,6 +37,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { RichTextEditor } from "@/components/dashboard/rich-text-editor"
+
+
+interface Meta {
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
 
 export default function BlogsPage() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -158,7 +168,7 @@ export default function BlogsPage() {
   }
 
   const blogs = blogsData?.data || []
-  const meta = blogsData?.meta || {}
+  const meta: Meta = blogsData?.meta || { total: 0, page: 0, limit: 0, totalPages: 0 }
 
   return (
     <div className="p-6 space-y-6">

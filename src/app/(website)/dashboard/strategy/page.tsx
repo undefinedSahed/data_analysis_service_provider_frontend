@@ -32,6 +32,7 @@ import { Label } from "@/components/ui/label"
 
 export default function StrategyPage() {
   const [currentPage, setCurrentPage] = useState(1)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedStrategy, setSelectedStrategy] = useState<any>(null)
   const [response, setResponse] = useState("")
   const queryClient = useQueryClient()
@@ -47,6 +48,7 @@ export default function StrategyPage() {
       queryClient.invalidateQueries({ queryKey: ["strategies"] })
       toast.success("Strategy deleted successfully")
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       toast.error(error.message || "Failed to delete strategy")
     },
@@ -105,6 +107,7 @@ export default function StrategyPage() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {strategies.map((strategy: any) => (
             <div key={strategy._id} className="grid grid-cols-12 gap-4 items-center py-4 border-b last:border-b-0">
               <div className="col-span-2">

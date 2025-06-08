@@ -1,10 +1,12 @@
 import PaymentCancel from '@/components/payment/payment-cancel-page'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 export default function page() {
     return (
         <main>
-            <PaymentCancel />
+            <Suspense fallback={<div>Loading...</div>}>
+                <PaymentCancel />
+            </Suspense>
         </main>
     )
 }

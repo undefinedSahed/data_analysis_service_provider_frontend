@@ -17,7 +17,7 @@ export default function Services() {
 
     const { data: services, isLoading, isError, error } = useQuery({
         queryKey: ['services'],
-        queryFn: fetchServices
+        queryFn: () => fetchServices()
     })
 
 

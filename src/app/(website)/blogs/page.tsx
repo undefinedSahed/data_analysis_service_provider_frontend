@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { BlogCard } from "@/components/shared/blog-card"
 import { Skeleton } from "@/components/ui/skeleton"
+import Image from "next/image"
 
 interface Blog {
   _id: string
@@ -47,7 +48,7 @@ export default function BlogListPage() {
     )
   }
 
-  
+
 
   return (
     <div className="min-h-screen bg-white">
@@ -58,14 +59,16 @@ export default function BlogListPage() {
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 mt-[50px]">Latest Blogs</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
               Our team is always ready to assist you with any questions or concerns you might have. Fill out the form
-              below and we'll get back to you as soon as possible
+              below and we&apos;ll get back to you as soon as possible
             </p>
           </div>
 
           {/* Hero Images Grid */}
           <div className="">
             <div className="relative h-[500px] rounded-2xl overflow-hidden">
-              <img
+              <Image
+                width={1000}
+                height={1000}
                 src="/images/blog-hero.png"
                 alt="Business team collaboration"
                 className="w-full h-full object-cover"
@@ -98,7 +101,7 @@ export default function BlogListPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">All Blogs Post</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Our team is always ready to assist you with any questions or concerns you might have. Fill out the form
-              below and we'll get back to you as soon as possible
+              below and we&apos;ll get back to you as soon as possible
             </p>
           </div>
 

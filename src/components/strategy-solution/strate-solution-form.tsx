@@ -29,7 +29,7 @@ export default function StrategyForm() {
         setSubmitMessage("")
 
         try {
-            const result = await createStrategy(formData)
+            await createStrategy(formData)
             setSubmitMessage("Strategy created successfully!")
 
             setFormData({
