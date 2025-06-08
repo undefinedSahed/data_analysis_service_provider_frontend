@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
 import { CustomPagination } from "../shared/pagination"
@@ -20,23 +19,19 @@ interface Payment {
 }
 
 interface PaymentTableProps {
-    payments: Payment[]
-    totalPages: number
-    perPage: number
-    totalItems: number
+    payments: {
+        data: Payment[]
+    }
+    pagination: {
+        totalPages: number
+        itemsPerPage: number
+        totalItems: number
+    }
+    currentPage: number
+    onPageChange: (page: number) => void
 }
 
-export function PaymentTable({ payments, totalPages, perPage, totalItems }: PaymentTableProps) {
-    const [currentPage, setCurrentPage] = useState(1)
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page)
-        // Here you would typically fetch new data for the selected page
-        console.log(`Fetching page ${page}`)
-    }
-
-    console.log(payments)
-
+export function PaymentTable({ payments, pagination, currentPage, onPageChange }: PaymentTableProps) {
     return (
         <div className="border border-gray-200 rounded-lg overflow-hidden">
             <Table>
@@ -50,7 +45,7 @@ export function PaymentTable({ payments, totalPages, perPage, totalItems }: Paym
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {payments?.map((payment) => (
+                    {payments?.data?.map((payment) => (
                         <TableRow key={payment._id}>
                             <TableCell className="text-center">
                                 <span className="text-gray-900">{payment.serviceId.serviceTitle}</span>
@@ -63,14 +58,16 @@ export function PaymentTable({ payments, totalPages, perPage, totalItems }: Paym
                             </TableCell>
                             <TableCell className="text-center">
                                 <div className="text-sm text-gray-600">
-                                    {new Date(payment.createdAt).toLocaleString("en-GB", {
-                                        day: "2-digit",
-                                        month: "2-digit",
-                                        year: "numeric",
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                        hour12: true,
-                                    }).replace(",", " |")}
+                                    {new Date(payment.createdAt)
+                                        .toLocaleString("en-GB", {
+                                            day: "2-digit",
+                                            month: "2-digit",
+                                            year: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            hour12: true,
+                                        })
+                                        .replace(",", " |")}
                                 </div>
                             </TableCell>
                             <TableCell className="text-center">
@@ -87,10 +84,10 @@ export function PaymentTable({ payments, totalPages, perPage, totalItems }: Paym
             <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
                 <CustomPagination
                     currentPage={currentPage}
-                    totalPages={totalPages}
-                    perPage={perPage}
-                    totalItems={totalItems}
-                    onPageChange={handlePageChange}
+                    totalPages={pagination.totalPages}
+                    perPage={pagination.itemsPerPage}
+                    totalItems={pagination.totalItems}
+                    onPageChange={onPageChange}
                 />
             </div>
         </div>

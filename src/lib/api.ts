@@ -312,9 +312,9 @@ export async function fetchPaymentStatus(data: any) {
 }
 
 
-export async function fetchUserPayments() {
+export async function fetchUserPayments(page = 1, limit = 5) {
   try {
-    const response = await api.get(`/payment/my-payments`)
+    const response = await api.get(`/payment/my-payments?page=${page}&limit=${limit}`)
     return response.data
   } catch (error: any) {
     throw new Error(error.message || "Failed to fetch payments")
