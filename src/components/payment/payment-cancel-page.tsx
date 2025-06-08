@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { XCircle, ArrowLeft, CreditCard } from "lucide-react"
+import { XCircle, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useSearchParams } from "next/navigation"
@@ -18,10 +18,7 @@ export default function PaymentCancel() {
 
     const {
         mutate: confirmPayment,
-        data: paymentStatus,
-        isPending,
-        isError,
-        error,
+        data: paymentStatus
     } = useMutation({
         mutationFn: fetchPaymentStatus,
     })
@@ -31,7 +28,7 @@ export default function PaymentCancel() {
         if (paymentIntentId) {
             confirmPayment({ paymentIntentId })
         }
-    }, [paymentIntentId])
+    }, [paymentIntentId, confirmPayment])
 
     console.log(paymentStatus)
 

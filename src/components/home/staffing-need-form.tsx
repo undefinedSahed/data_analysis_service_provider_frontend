@@ -50,6 +50,8 @@ export default function StaffingNeedForm() {
             toast.success("Staffing need submitted successfully!")
             form.reset()
         },
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (error: any) => {
             toast.error(error.message || "Failed to submit staffing need")
         },

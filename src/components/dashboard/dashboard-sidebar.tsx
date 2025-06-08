@@ -8,7 +8,6 @@ import {
   LayoutDashboard,
   Settings,
   FileText,
-  Calendar,
   CreditCard,
   LogOut,
   Lightbulb,

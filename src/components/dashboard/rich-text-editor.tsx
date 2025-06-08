@@ -10,6 +10,7 @@ interface RichTextEditorProps {
   value: string
   onChange: (value: string) => void
   placeholder?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control?: any
   name?: string
   error?: string

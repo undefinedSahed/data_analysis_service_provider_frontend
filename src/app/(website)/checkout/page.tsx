@@ -1,11 +1,13 @@
 import CheckoutPage from '@/components/checkout/checkout-page'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 export default function page() {
-    
+
     return (
         <main>
-            <CheckoutPage />
+            <Suspense fallback={<div>Loading...</div>}>
+                <CheckoutPage />
+            </Suspense>
         </main>
     )
 }

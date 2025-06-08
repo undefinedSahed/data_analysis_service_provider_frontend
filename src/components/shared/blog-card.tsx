@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "lucide-react"
+import Image from "next/image"
 
 interface Blog {
   _id: string
@@ -32,9 +33,11 @@ export function BlogCard({ blog }: BlogCardProps) {
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group">
       <div className="relative h-64 overflow-hidden">
-        <img
-          src={blog?.imageLink || "/placeholder.svg"}
+        <Image
+          src={blog?.imageLink}
           alt={blog?.blogTitle}
+          width={1000}
+          height={1000}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
       </div>

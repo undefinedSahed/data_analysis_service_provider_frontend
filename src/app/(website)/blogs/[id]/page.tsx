@@ -3,9 +3,10 @@
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Calendar, Eye, ArrowLeft } from "lucide-react"
+import { Calendar, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
+import Image from "next/image"
 
 interface Blog {
   _id: string
@@ -98,7 +99,7 @@ export default function BlogDetailPage() {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-6xl mx-auto px-4 py-8">
-     
+
 
         {/* Header */}
         <div className="text-center mb-12 mt-[100px]">
@@ -107,13 +108,13 @@ export default function BlogDetailPage() {
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Need assistance? We are here to help. To inquire about the products and services found on our website,
-            please contact us by phone or e-mail, and we'll gladly assist you.
+            please contact us by phone or e-mail, and we&apos;ll gladly assist you.
           </p>
         </div>
 
         {/* Hero Image */}
         <div className="relative h-96 md:h-[500px] rounded-2xl overflow-hidden mb-8">
-          <img src={blog?.imageLink} alt={blog?.blogTitle} className="w-full h-full object-cover rounded-2xl" />
+          <Image width={1000} height={1000} src={blog?.imageLink} alt={blog?.blogTitle} className="w-full h-full object-cover rounded-2xl" />
         </div>
 
         {/* Blog Meta */}
@@ -144,7 +145,7 @@ export default function BlogDetailPage() {
         </article>
 
 
-        
+
       </div>
     </div>
   )

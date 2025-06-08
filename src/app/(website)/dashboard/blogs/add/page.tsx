@@ -25,11 +25,14 @@ export default function AddBlogPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const createMutation = useMutation({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mutationFn: ({ data, image }: { data: any; image?: File }) => createBlog(data, image),
     onSuccess: () => {
       toast.success("Blog created successfully")
       router.push("/dashboard/blogs")
     },
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       toast.error(error.message || "Failed to create blog")
     },
