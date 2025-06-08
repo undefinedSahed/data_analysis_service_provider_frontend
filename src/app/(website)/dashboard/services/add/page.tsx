@@ -26,11 +26,13 @@ export default function AddServicePage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const createMutation = useMutation({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mutationFn: ({ data, image }: { data: any; image?: File }) => createService(data, image),
     onSuccess: () => {
       toast.success("Service created successfully")
       router.push("/dashboard/services")
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       toast.error(error.message || "Failed to create service")
     },

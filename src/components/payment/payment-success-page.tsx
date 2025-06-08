@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { CheckCircle, Download, Mail } from "lucide-react"
+import { CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { fetchPaymentStatus } from "@/lib/api"
 import { useSearchParams } from "next/navigation"
 import { useEffect } from "react"
@@ -18,10 +18,7 @@ export default function PaymentSuccess() {
 
     const {
         mutate: confirmPayment,
-        data: paymentStatus,
-        isPending,
-        isError,
-        error,
+        data: paymentStatus
     } = useMutation({
         mutationFn: fetchPaymentStatus,
     })
@@ -31,7 +28,7 @@ export default function PaymentSuccess() {
         if (paymentIntentId) {
             confirmPayment({ paymentIntentId })
         }
-    }, [paymentIntentId])
+    }, [paymentIntentId, confirmPayment])
 
     console.log(paymentStatus)
 
@@ -54,7 +51,7 @@ export default function PaymentSuccess() {
 
                             {/* Next Steps */}
                             <div className="text-left bg-blue-50 rounded-lg p-6">
-                                <h3 className="font-semibold text-gray-900 mb-3">What's Next?</h3>
+                                <h3 className="font-semibold text-gray-900 mb-3">What&apos;s Next?</h3>
                                 <ul className="space-y-2 text-sm text-gray-600">
                                     <li>• Your service will be activated within 24 hours</li>
                                     <li>• Check your dashboard for updates and access</li>

@@ -2,7 +2,6 @@
 import { BlogResponse } from "@/components/solution/blog"
 import axios from "axios"
 import { getSession } from "next-auth/react"
-import { a } from "node_modules/@tanstack/react-query-devtools/build/modern/ReactQueryDevtools-Cn7cKi7o"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
