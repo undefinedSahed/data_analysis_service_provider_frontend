@@ -10,7 +10,7 @@ import { Loader2, Lock } from "lucide-react"
 import { FaStripe } from "react-icons/fa"
 import { toast } from "sonner"
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string)
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE as string)
 
 interface Service {
     data: {
