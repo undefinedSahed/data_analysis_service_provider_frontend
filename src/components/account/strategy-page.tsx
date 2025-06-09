@@ -16,6 +16,8 @@ export default function StrategySolutionsPage() {
     console.log(userStrategies)
 
 
+    console.log(userStrategies)
+
     // These would come from your API response
     const totalPages = 17
     const perPage = 10
