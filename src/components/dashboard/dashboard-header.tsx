@@ -26,6 +26,8 @@ export function DashboardHeader() {
     return `${firstInitial}${lastInitial}`
   }
 
+  console.log(session)
+
   return (
     <header className="flex w-full items-center justify-between border-b border-[#222] bg-[#131313] p-4 backdrop-blur-xl">
       <h1 className="text-xl font-bold">Dashboard</h1>
@@ -36,7 +38,7 @@ export function DashboardHeader() {
             <DropdownMenuTrigger asChild>
               <div className="flex cursor-pointer items-center space-x-2">
                 <Avatar className="border border-red-600">
-                  <AvatarImage src={session.user?.image || ""} />
+                  <AvatarImage src={session.user?.image || ""} width={100} height={100} />
                   <AvatarFallback className="bg-red-900 text-white">{getUserInitials()}</AvatarFallback>
                 </Avatar>
                 <span className="hidden text-sm text-white md:block">
@@ -57,11 +59,8 @@ export function DashboardHeader() {
                 </div>
               </div>
               <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild className="cursor-pointer">
                 <Link href="/dashboard">Dashboard</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/dashboard/profile">Profile</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem

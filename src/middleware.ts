@@ -36,6 +36,11 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/", request.url));
     }
 
+
+    if (pathname.startsWith("/account") && token?.role !== "user") {
+        return NextResponse.redirect(new URL("/", request.url));
+    }
+
     // All other routes are allowed
     return NextResponse.next();
 }

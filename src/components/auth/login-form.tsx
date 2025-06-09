@@ -10,7 +10,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-import { getSession, signIn, useSession } from "next-auth/react"
+import { getSession, signIn } from "next-auth/react"
 import { useState } from "react"
 
 const formSchema = z

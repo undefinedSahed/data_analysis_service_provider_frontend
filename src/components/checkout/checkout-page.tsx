@@ -41,7 +41,7 @@ function CheckoutForm() {
             return
         }
 
-        let paymentElement = elements.getElement(PaymentElement)
+        const paymentElement = elements.getElement(PaymentElement)
         if (!paymentElement) {
             setTimeout(() => setMessage("Payment form is still loading. Please wait."), 1000)
             return
@@ -70,6 +70,7 @@ function CheckoutForm() {
             } else {
                 setMessage(`Payment status: ${paymentIntent?.status}`)
             }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error("Payment error (if any):", error)
             setMessage("An unexpected error occurred")
@@ -172,7 +173,6 @@ export default function CheckoutPage() {
                     console.error("No clientSecret returned from createPayment API!")
                     return
                 }
-
                 setClientSecret(response.clientSecret)
             } catch (error) {
                 console.error("Failed to create payment intent:", error)
