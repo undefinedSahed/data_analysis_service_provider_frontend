@@ -27,7 +27,7 @@ interface BlogResponse {
 }
 
 async function fetchBlogs(): Promise<BlogResponse> {
-  const response = await fetch("http://localhost:5000/api/v1/blog/get")
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blog/get`)
   if (!response.ok) {
     throw new Error("Failed to fetch blogs")
   }
