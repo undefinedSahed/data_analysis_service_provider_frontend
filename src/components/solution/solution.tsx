@@ -14,9 +14,12 @@ export interface SolutionType {
 
 export default function Solutions() {
 
+    const [currentPage] = React.useState(1)
+
+
     const { data: solutions, isLoading, isError, error } = useQuery({
         queryKey: ['solutions'],
-        queryFn: fetchSolutions
+        queryFn: () => fetchSolutions(currentPage, 200),
     })
 
     return (

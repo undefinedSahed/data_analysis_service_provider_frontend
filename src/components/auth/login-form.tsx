@@ -10,7 +10,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-import { signIn } from "next-auth/react"
+import { getSession, signIn } from "next-auth/react"
 import { useState } from "react"
 
 const formSchema = z
@@ -43,14 +43,20 @@ export default function LoginForm() {
                 redirect: false,
                 email: values.email,
                 password: values.password,
-            });
+
+            })
 
             if (result?.error) {
                 toast.error(result.error);
-            } else {
-                toast.success("You have been logged in successfully");
-                router.push("/");
             }
+
+            if (result?.ok) {
+                const session = await getSession()
+
+                toast.success("Login successful");
+                router.push(session?.user?.role === "admin" ? "/dashboard" : "/");
+            }
+
         } catch (error) {
             toast.error("An unexpected error occurred");
             console.log(error);

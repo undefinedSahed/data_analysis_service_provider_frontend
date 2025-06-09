@@ -22,23 +22,24 @@ interface StrategySolution {
     name: string
 }
 
+
 interface StrategyTableProps {
-    strategySolutions: StrategySolution[]
-    totalPages: number
-    perPage: number
-    totalItems: number
+    strategySolutions: {
+        data: StrategySolution[]
+    }
+    pagination: {
+        totalPages: number
+        itemsPerPage: number
+        totalItems: number
+    }
+    currentPage: number
+    onPageChange: (page: number) => void
 }
 
-export function StrategyTable({ strategySolutions, totalPages, perPage, totalItems }: StrategyTableProps) {
-    const [currentPage, setCurrentPage] = useState(1)
+export function StrategyTable({ strategySolutions, pagination, currentPage, onPageChange }: StrategyTableProps) {
+
     const [selectedStrategy, setSelectedStrategy] = useState<StrategySolution | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page)
-        // Here you would typically fetch new data for the selected page
-        console.log(`Fetching page ${page}`)
-    }
 
     const handleViewDetails = (strategy: StrategySolution) => {
         setSelectedStrategy(strategy)
@@ -65,7 +66,7 @@ export function StrategyTable({ strategySolutions, totalPages, perPage, totalIte
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {strategySolutions?.map((item) => (
+                        {strategySolutions?.data?.map((item) => (
                             <TableRow key={item._id}>
                                 <TableCell>
                                     <div className="text-sm">
@@ -114,10 +115,10 @@ export function StrategyTable({ strategySolutions, totalPages, perPage, totalIte
                 <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
                     <CustomPagination
                         currentPage={currentPage}
-                        totalPages={totalPages}
-                        perPage={perPage}
-                        totalItems={totalItems}
-                        onPageChange={handlePageChange}
+                        totalPages={pagination.totalPages}
+                        perPage={pagination.itemsPerPage}
+                        totalItems={pagination.totalItems}
+                        onPageChange={onPageChange}
                     />
                 </div>
             </div>

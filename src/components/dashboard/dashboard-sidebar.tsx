@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 
 import { Sidebar, SidebarContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
+import { signOut } from "next-auth/react"
 
 const menuItems = [
   {
@@ -62,12 +63,9 @@ export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sideb
   const isActive = (path: string) => pathname === path
 
   const handleLogout = async () => {
-    try {
-      // await signOut({ callbackUrl: "/" })
-      console.log("Logout functionality to be implemented")
-    } catch (error) {
-      console.error("Error during logout:", error)
-    }
+
+    await signOut({ callbackUrl: "/" })
+
   }
 
   return (
