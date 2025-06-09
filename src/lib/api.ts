@@ -69,9 +69,9 @@ export async function updatePassword(data: { currentPassword: string; newPasswor
 
 
 // Solutions API
-export async function fetchSolutions() {
+export async function fetchSolutions(page = 1, limit = 5) { 
   try {
-    const response = await api.get(`/solution/get`)
+    const response = await api.get(`/solution/get?page=${page}&limit=${limit}`)
     return response.data
   } catch (error: any) {
     throw new Error(error.message || "Failed to fetch solutions")
@@ -79,7 +79,35 @@ export async function fetchSolutions() {
 }
 
 
-// Needed staff API
+export async function createSolution(data: any) {
+  try {
+    const response = await api.post(`/solution/create`, data)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to create solution")
+  }
+}
+
+
+export async function updateSolution(id: string, data: any) {
+  try {
+    const response = await api.put(`/solution/${id}`, data)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to update solution")
+  }
+}
+
+export async function deleteSolution(id: string) {
+  try {
+    const response = await api.delete(`/solution/${id}`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to delete solution")
+  }
+}
+
+
 
 // Needed staff API
 export async function createStaffingNeed(data: {
@@ -257,9 +285,9 @@ export async function updateStrategy(id: string, data: any) {
 
 
 // Get user Strategies
-export async function fetchUserStrategies() {
+export async function fetchUserStrategies(page = 1, limit = 5) {
   try {
-    const response = await api.get(`/strategy/my-strategy`)
+    const response = await api.get(`/strategy/my-strategy?page=${page}&limit=${limit}`)
     return response.data
   } catch (error: any) {
     throw new Error(error.message || "Failed to fetch user strategies")
@@ -301,6 +329,17 @@ export async function createPayment(data: any) {
 }
 
 
+export async function fetchAllPayments(page = 1, limit = 5) {
+  try {
+    const response = await api.get(`/payment?page=${page}&limit=${limit}`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch payments")
+  }
+
+}
+
+
 // Payment Status API
 export async function fetchPaymentStatus(data: any) {
   try {
@@ -312,9 +351,9 @@ export async function fetchPaymentStatus(data: any) {
 }
 
 
-export async function fetchUserPayments() {
+export async function fetchUserPayments(page = 1, limit = 5) {
   try {
-    const response = await api.get(`/payment/my-payments`)
+    const response = await api.get(`/payment/my-payments?page=${page}&limit=${limit}`)
     return response.data
   } catch (error: any) {
     throw new Error(error.message || "Failed to fetch payments")

@@ -32,10 +32,18 @@ function CheckoutForm() {
     const [agreeToTerms, setAgreeToTerms] = useState(false)
 
     const handlePayment = async () => {
-        if (!stripe || !elements || !agreeToTerms) {
-            if (!agreeToTerms) {
-                setMessage("Please agree to the shipping & billing address terms")
-            }
+        if (!stripe || !elements) {
+            setMessage("Stripe has not loaded yet. Please wait a moment.")
+            return
+        }
+        if (!agreeToTerms) {
+            setMessage("Please agree to the shipping & billing address terms")
+            return
+        }
+
+        const paymentElement = elements.getElement(PaymentElement)
+        if (!paymentElement) {
+            setTimeout(() => setMessage("Payment form is still loading. Please wait."), 1000)
             return
         }
 
@@ -51,6 +59,9 @@ function CheckoutForm() {
                 redirect: "if_required",
             })
 
+            console.log("Payment error (if any):", error)
+            console.log("PaymentIntent result:", paymentIntent)
+
             if (error) {
                 setMessage(error.message || "Payment failed")
                 toast.error(error.message || "Payment failed")
@@ -58,18 +69,15 @@ function CheckoutForm() {
                 router.push(`/payment-success?paymentIntentId=${paymentIntent.id}`)
             } else {
                 setMessage(`Payment status: ${paymentIntent?.status}`)
-                router.push(`/payment-cancel?paymentIntentId=${paymentIntent.id}`)
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
+            console.error("Payment error (if any):", error)
             setMessage("An unexpected error occurred")
-            throw new Error("An unexpected error occurred: ", error)
-            router.push("/payment-cancel")
         } finally {
             setLoading(false)
         }
     }
-
 
     return (
         <>
@@ -99,9 +107,7 @@ function CheckoutForm() {
             <button
                 onClick={handlePayment}
                 disabled={loading || !agreeToTerms}
-                className={`w-full mt-6 flex justify-center items-center py-3 px-4 rounded-md text-white font-medium ${loading || !agreeToTerms
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-blue-500 hover:bg-blue-600"
+                className={`w-full mt-6 flex justify-center items-center py-3 px-4 rounded-md text-white font-medium ${loading || !agreeToTerms ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
                     }`}
             >
                 {loading ? (
@@ -121,7 +127,7 @@ function CheckoutForm() {
 }
 
 export default function CheckoutPage() {
-    const searchParams = useSearchParams();
+    const searchParams = useSearchParams()
     const serviceId = searchParams.get("serviceId")
 
     const { data: session } = useSession()
@@ -129,6 +135,7 @@ export default function CheckoutPage() {
     const [service, setService] = useState<Service | null>(null)
     const [clientSecret, setClientSecret] = useState("")
     const [fetchingService, setFetchingService] = useState(true)
+    const [stripeLoaded, setStripeLoaded] = useState(false)
     const subtotal = service?.data?.price || 0
 
     useEffect(() => {
@@ -154,12 +161,19 @@ export default function CheckoutPage() {
             if (!service || !session?.user?.id) return
 
             try {
-                const { clientSecret } = await createPayment({
+                console.log("Creating payment intent for:", { userId: session.user.id, serviceId: service.data._id, amount: subtotal })
+                const response = await createPayment({
                     userId: session.user.id,
                     serviceId: service.data._id,
                     amount: subtotal,
                 })
-                setClientSecret(clientSecret)
+                console.log("Payment intent response:", response)
+
+                if (!response.clientSecret) {
+                    console.error("No clientSecret returned from createPayment API!")
+                    return
+                }
+                setClientSecret(response.clientSecret)
             } catch (error) {
                 console.error("Failed to create payment intent:", error)
             }
@@ -169,6 +183,13 @@ export default function CheckoutPage() {
             createPaymentIntent()
         }
     }, [service, session, subtotal])
+
+    useEffect(() => {
+        stripePromise.then(() => setStripeLoaded(true))
+    }, [])
+
+    // Debugging logs:
+    console.log("Render CheckoutPage", { clientSecret, session, stripeLoaded })
 
     return (
         <section className="py-8 lg:py-20">
@@ -230,8 +251,15 @@ export default function CheckoutPage() {
                                     <FaStripe className="w-24 h-20 object-contain" />
                                 </div>
 
-                                {clientSecret && session ? (
-                                    <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: "stripe" } }}>
+                                {/* Only render Elements when clientSecret, session, and stripe are loaded */}
+                                {clientSecret && session && stripeLoaded ? (
+                                    <Elements
+                                        stripe={stripePromise}
+                                        options={{
+                                            clientSecret,
+                                            appearance: { theme: "stripe" },
+                                        }}
+                                    >
                                         <CheckoutForm />
                                     </Elements>
                                 ) : !session ? (

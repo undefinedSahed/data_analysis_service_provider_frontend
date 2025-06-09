@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { CustomPagination } from "../shared/pagination"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -24,21 +23,19 @@ interface Service {
 }
 
 interface ServiceTableProps {
-    services: Service[]
-    totalPages: number
-    perPage: number
-    totalItems: number
+    services: {
+        data: Service[]
+    }
+    pagination: {
+        totalPages: number
+        itemsPerPage: number
+        totalItems: number
+    }
+    currentPage: number
+    onPageChange: (page: number) => void
 }
 
-export function ServiceTable({ services, totalPages, perPage, totalItems }: ServiceTableProps) {
-    const [currentPage, setCurrentPage] = useState(1)
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page)
-        // Here you would typically fetch new data for the selected page
-        console.log(`Fetching page ${page}`)
-    }
-
+export function ServiceTable({ services, pagination, currentPage, onPageChange }: ServiceTableProps) {
     const formatDate = (dateString: string) => {
         return new Date(dateString)
             .toLocaleString("en-GB", {
@@ -56,7 +53,7 @@ export function ServiceTable({ services, totalPages, perPage, totalItems }: Serv
         <div className="w-full">
             {/* Mobile Card Layout */}
             <div className="block lg:hidden space-y-4">
-                {services?.map((service) => (
+                {services?.data?.map((service) => (
                     <Card key={service.id} className="overflow-hidden">
                         <CardContent className="p-4">
                             <div className="flex items-start gap-4">
@@ -108,7 +105,7 @@ export function ServiceTable({ services, totalPages, perPage, totalItems }: Serv
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {services?.map((service) => (
+                        {services?.data?.map((service) => (
                             <TableRow key={service.id} className="hover:bg-gray-50 transition-colors">
                                 <TableCell className="px-6 py-6">
                                     <div className="flex items-center gap-6">
@@ -174,12 +171,13 @@ export function ServiceTable({ services, totalPages, perPage, totalItems }: Serv
             <div className="bg-gray-50 px-4 lg:px-6 py-4 border-t border-gray-200 rounded-b-lg lg:rounded-b-none">
                 <CustomPagination
                     currentPage={currentPage}
-                    totalPages={totalPages}
-                    perPage={perPage}
-                    totalItems={totalItems}
-                    onPageChange={handlePageChange}
+                    totalPages={pagination.totalPages}
+                    perPage={pagination.itemsPerPage}
+                    totalItems={pagination.totalItems}
+                    onPageChange={onPageChange}
                 />
             </div>
         </div>
     )
 }
+

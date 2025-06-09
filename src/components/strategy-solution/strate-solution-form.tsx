@@ -10,8 +10,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
 import { createStrategy } from "@/lib/api"
+import { useQueryClient } from "@tanstack/react-query"
 
 export default function StrategyForm() {
+
+    const queryClient = useQueryClient()
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -39,6 +43,7 @@ export default function StrategyForm() {
                 dataStrategy: "",
                 strategyDescription: "",
             })
+            queryClient.invalidateQueries({ queryKey: ["userStrategies"] })
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error("Error creating strategy:", error)
@@ -118,9 +123,9 @@ export default function StrategyForm() {
                                                 <SelectValue placeholder="Select an option" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="analytics">Enterprise Data Solutions</SelectItem>
-                                                <SelectItem value="governance">Business Data Solutions</SelectItem>
-                                                <SelectItem value="architecture">Baseline Data Solutions</SelectItem>
+                                                <SelectItem value="enterprise data solutions">Enterprise Data Solutions</SelectItem>
+                                                <SelectItem value="business data solutions">Business Data Solutions</SelectItem>
+                                                <SelectItem value="baseline data solutions">Baseline Data Solutions</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>

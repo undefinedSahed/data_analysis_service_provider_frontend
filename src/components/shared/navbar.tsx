@@ -70,9 +70,9 @@ export default function Navbar() {
                                                     <Image
                                                         src={session.user.image || "/placeholder.svg"}
                                                         alt={session.user.name || "User"}
-                                                        width={32}
-                                                        height={32}
-                                                        className="rounded-full"
+                                                        width={80}
+                                                        height={80}
+                                                        className="h-10 w-10 rounded-full object-cover"
                                                     />
                                                 ) : (
                                                     <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center">
@@ -94,9 +94,17 @@ export default function Navbar() {
                                         </div>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem asChild>
-                                            <Link href="/account" className="cursor-pointer">
-                                                Account Settings
-                                            </Link>
+                                            {
+                                                session.user?.role === "admin" ? (
+                                                    <Link href="/dashboard" className="cursor-pointer">
+                                                        Dashboard
+                                                    </Link>
+                                                ) : (
+                                                    <Link href="/account" className="cursor-pointer">
+                                                        Account Setting
+                                                    </Link>
+                                                )
+                                            }
                                         </DropdownMenuItem>
                                         {/* <DropdownMenuItem asChild>
                                             <Link href="/profile" className="cursor-pointer">
@@ -104,7 +112,7 @@ export default function Navbar() {
                                             </Link>
                                         </DropdownMenuItem> */}
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem 
+                                        <DropdownMenuItem
                                             className="cursor-pointer text-red-600 focus:text-red-600"
                                             onClick={() => signOut()}
                                         >
@@ -121,7 +129,7 @@ export default function Navbar() {
                                     </Button>
                                 </Link>
                             )}
-                            
+
                             <Link href="/strategy-solution">
                                 <Button className="bg-[#38B1EA] hover:bg-cyan-600 text-white px-6 py-2 rounded-md font-medium">
                                     Strategy session
@@ -182,14 +190,14 @@ export default function Navbar() {
                                                 </Link>
                                             )
                                         })}
-                                        
+
                                         <div className="pt-4 border-t space-y-2">
                                             <Link href="/strategy-solution">
                                                 <Button className="w-full bg-[#38B1EA] hover:bg-cyan-600 text-white mb-4">
                                                     Strategy session
                                                 </Button>
                                             </Link>
-                                            
+
                                             {status === "authenticated" && session ? (
                                                 <>
                                                     <Button variant="ghost" className="w-full justify-start" asChild>

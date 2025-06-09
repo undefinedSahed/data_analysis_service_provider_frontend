@@ -4,22 +4,25 @@ import { StrategyTable } from "@/components/account/strategy-table"
 import { fetchUserStrategies } from "@/lib/api"
 import { useQuery } from "@tanstack/react-query"
 import { Loader2 } from "lucide-react"
+import { useState } from "react"
 
 export default function StrategySolutionsPage() {
 
+    const [currentPage, setCurrentPage] = useState(1)
+    const limit = 5
+
     const { data: userStrategies, isLoading, isError, error } = useQuery({
         queryKey: ['userStrategies'],
-        queryFn: fetchUserStrategies,
-        select: (data) => data.data
+        queryFn: () => fetchUserStrategies(currentPage, limit),
+        select: (data) => data
     })
 
     console.log(userStrategies)
 
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page)
+    }
 
-    // These would come from your API response
-    const totalPages = 17
-    const perPage = 10
-    const totalItems = 50
 
     return (
         <div className="container mx-auto">
@@ -38,9 +41,9 @@ export default function StrategySolutionsPage() {
 
                         <StrategyTable
                             strategySolutions={userStrategies}
-                            totalPages={totalPages}
-                            perPage={perPage}
-                            totalItems={totalItems}
+                            pagination={userStrategies.pagination}
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
                         />
             }
         </div>

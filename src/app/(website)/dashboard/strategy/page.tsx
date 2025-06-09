@@ -92,7 +92,7 @@ export default function StrategyPage() {
     <div className="p-6 space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Strategy</h1>
-        <p className="text-gray-600 mt-1">Dashboard &gt; Blogs &gt; Add Blog</p>
+        <p className="text-gray-600 mt-1">Dashboard &gt; Strategy Management</p>
       </div>
 
       <Card>
