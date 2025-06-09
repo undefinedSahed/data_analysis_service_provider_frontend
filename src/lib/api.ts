@@ -257,9 +257,9 @@ export async function updateStrategy(id: string, data: any) {
 
 
 // Get user Strategies
-export async function fetchUserStrategies() {
+export async function fetchUserStrategies(page = 1, limit = 5) {
   try {
-    const response = await api.get(`/strategy/my-strategy`)
+    const response = await api.get(`/strategy/my-strategy?page=${page}&limit=${limit}`)
     return response.data
   } catch (error: any) {
     throw new Error(error.message || "Failed to fetch user strategies")

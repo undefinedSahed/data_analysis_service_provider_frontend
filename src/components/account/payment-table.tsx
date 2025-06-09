@@ -16,6 +16,7 @@ interface Payment {
         serviceTitle: string
     }
     createdAt: string
+    status: string
 }
 
 interface PaymentTableProps {
@@ -41,6 +42,7 @@ export function PaymentTable({ payments, pagination, currentPage, onPageChange }
                         <TableHead className="text-center">Total</TableHead>
                         <TableHead className="text-center">Payment Method</TableHead>
                         <TableHead className="text-center">Time</TableHead>
+                        <TableHead className="text-center">Status</TableHead>
                         <TableHead className="text-center">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -69,6 +71,9 @@ export function PaymentTable({ payments, pagination, currentPage, onPageChange }
                                         })
                                         .replace(",", " |")}
                                 </div>
+                            </TableCell>
+                            <TableCell className="text-center">
+                                <span className="text-gray-600">{payment.status}</span>
                             </TableCell>
                             <TableCell className="text-center">
                                 <Button variant="ghost" size="sm">
