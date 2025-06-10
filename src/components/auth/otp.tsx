@@ -7,8 +7,8 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { useRef, useState } from "react"
-import Image from "next/image"
-import { verifyOTP } from "@/app/actions/auth"
+// import Image from "next/image"
+import { forgotpasswordVerifyToken, verifyOTP } from "@/app/actions/auth"
 import { toast } from "sonner"
 import { useRouter, useSearchParams } from "next/navigation"
 // import { useRouter } from "next/navigation"
@@ -26,6 +26,7 @@ export default function VerifyOTPForm() {
 
     const searchParams = useSearchParams();
     const token = searchParams.get('token')
+    const action = searchParams.get('action')
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -59,17 +60,31 @@ export default function VerifyOTPForm() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
-        const res = await verifyOTP(values, token);
+
+        let res;
+
+        if (action === "reset-password") {
+            res = await forgotpasswordVerifyToken(token as string, values.otp);
+        } else {
+            res = await verifyOTP(values, token);
+        }
 
         if (res.success) {
             toast.success(res.message || "OTP verified successfully!");
-            router.push(`/login`);
+
+            if (action === "reset-password") {
+                router.push(`/reset-password?token=${res?.data?.accessToken}`);
+            } else {
+                router.push(`/login`);
+            }
         } else {
-            toast.error(res.message || "Failed to send reset email");
+            toast.error(res.message || "Failed to verify OTP");
         }
 
         setIsLoading(false);
     }
+
+
 
     return (
         <section>
@@ -78,12 +93,13 @@ export default function VerifyOTPForm() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
                         {/* Left side - Blue div (hidden on small screens) */}
                         <div className="relative hidden lg:block min-h-[600px]">
-                            <Image
+                            {/* <Image
                                 src="/images/auth.png"
                                 alt="Authentication Image"
                                 fill
                                 className="object-cover"
-                            />
+                            /> */}
+                            <div className="absolute bg-[#C1E7F8] w-full h-full"></div>
                         </div>
 
                         {/* Right side - Form */}

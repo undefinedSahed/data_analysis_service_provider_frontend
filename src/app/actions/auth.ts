@@ -99,6 +99,42 @@ export async function forgotPassword(email: string) {
     }
 }
 
+
+export async function forgotpasswordVerifyToken(token: string, otp: string) {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify-token`, {
+            method: "POST",
+            headers: {
+                Authorization: `${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ otp }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            return {
+                success: false,
+                message: data.message || "Failed to verify otp",
+            };
+        }
+
+        return {
+            success: true,
+            message: "Verified successfully",
+            data: data.data,
+        };
+    } catch (error) {
+        console.error("Verify token error:", error);
+        return {
+            success: false,
+            message: "An error occurred while processing your request",
+        };
+    }
+}
+
+
 export async function resetPassword(resetData: {
     token: string;
     password: string;
@@ -107,9 +143,10 @@ export async function resetPassword(resetData: {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password`, {
             method: "POST",
             headers: {
+                Authorization: `${resetData.token}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(resetData),
+            body: JSON.stringify({ newPassword: resetData.password }),
         });
 
         const data = await response.json();

@@ -27,7 +27,7 @@ export default function ServiceCard({
                     className='w-full aspect-[5/3] object-cover mx-auto mb-5 rounded-t-sm'
                 />
 
-                <div className="lg:px-8 px-4">
+                <div className="lg:px-8 px-4 flex flex-col justify-between">
                     <h3 className='text-xl lg:text-2xl font-semibold pb-4 capitalize'>
                         {serviceTitle}
                     </h3>
