@@ -8,7 +8,7 @@ import { useState } from "react"
 
 export default function PaymentPage() {
     const [currentPage, setCurrentPage] = useState(1)
-    const limit = 5
+    const limit = 6
     const {
         data: userPayments,
         isLoading,

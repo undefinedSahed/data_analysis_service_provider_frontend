@@ -7,6 +7,7 @@ const navigation = [
     { name: "Change password", href: "/account/change-password" },
     { name: "Service", href: "/account/service" },
     { name: "Payment", href: "/account/payment" },
+    { name: "Staffing Need", href: "/account/staffing-need" },
     { name: "Strategy Solutions", href: "/account/strategy-solutions" },
 ]
 
@@ -16,7 +17,7 @@ export default function AccountsLayout({
     children: React.ReactNode
 }) {
     return (
-        <div className="min-h-screen py-16 lg:py-24 bg-white">
+        <div className="min-h-screen py-16 lg:py-8 bg-white">
             <div className="container mx-auto">
                 <div className="text-center py-8">
                     <h1 className="text-4xl font-bold text-gray-900">Accounts</h1>
