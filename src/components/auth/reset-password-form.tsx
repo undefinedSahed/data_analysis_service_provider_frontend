@@ -5,7 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-import Image from "next/image"
+// import Image from "next/image"
+import { resetPassword } from "@/app/actions/auth"
+import { useSearchParams } from "next/navigation"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 const formSchema = z
     .object({
@@ -18,6 +22,12 @@ const formSchema = z
     })
 
 export default function ResetPasswordForm() {
+
+    const router = useRouter();
+
+    const searchParams = useSearchParams()
+    const token = searchParams.get("token")
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -26,10 +36,15 @@ export default function ResetPasswordForm() {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        const result = await resetPassword({ token: token as string, password: values.confirmPassword as string })
+
+        if (result.success) {
+            toast.success(result.message || "Password reset successfully!");
+            router.push(`/login`);
+        } else {
+            toast.error(result.message || "Failed to reset password");
+        }
     }
 
     return (
@@ -39,12 +54,13 @@ export default function ResetPasswordForm() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
                         {/* Left side - Blue div (hidden on small screens) */}
                         <div className="relative hidden lg:block min-h-[600px]">
-                            <Image
+                            {/* <Image
                                 src="/images/auth.png"
                                 alt="Authentication Image"
                                 fill
                                 className="object-cover"
-                            />
+                            /> */}
+                            <div className="absolute bg-[#C1E7F8] w-full h-full"></div>
                         </div>
                         {/* Right side - Form */}
                         <div className="p-8 md:p-12">

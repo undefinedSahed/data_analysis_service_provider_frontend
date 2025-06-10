@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import Link from "next/link"
-import Image from "next/image"
+// import Image from "next/image"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { getSession, signIn } from "next-auth/react"
@@ -73,12 +73,13 @@ export default function LoginForm() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
                         {/* Left side - Blue div (hidden on small screens) */}
                         <div className="relative hidden lg:block min-h-[600px]">
-                            <Image
+                            {/* <Image
                                 src="/images/auth.png"
                                 alt="Authentication Image"
                                 fill
                                 className="object-cover"
-                            />
+                            /> */}
+                            <div className="absolute bg-[#C1E7F8] w-full h-full"></div>
                         </div>
 
                         {/* Right side - Form */}

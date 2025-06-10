@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export default function Component() {
     return (
@@ -28,10 +29,12 @@ export default function Component() {
                                 in sed imperdiet sed et commodo in. Ultricies at lectus in varius a lectus.
                             </p>
 
-                            <Button className="bg-white text-cyan-400 hover:bg-gray-50 font-semibold px-6 py-3 rounded-lg inline-flex items-center gap-2 w-fit">
-                                Explore Who We Help
-                                <ArrowRight className="w-4 h-4" />
-                            </Button>
+                            <Link href={"/solution#about"}>
+                                <Button className="bg-white text-cyan-400 hover:bg-gray-50 font-semibold px-6 py-3 rounded-lg inline-flex items-center gap-2 w-fit">
+                                    Explore Who We Help
+                                    <ArrowRight className="w-4 h-4" />
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>
