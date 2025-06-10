@@ -31,8 +31,8 @@ export function BlogCard({ blog }: BlogCardProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group">
-      <div className="relative h-64 overflow-hidden">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-lg transition-shadow duration-300 group">
+      <div className="relative h-72 overflow-hidden">
         <Image
           src={blog?.imageLink}
           alt={blog?.blogTitle}

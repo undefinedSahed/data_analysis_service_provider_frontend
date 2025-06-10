@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-import Image from "next/image"
+// import Image from "next/image"
 import { forgotPassword } from "@/app/actions/auth"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
@@ -35,7 +35,7 @@ export default function ForgotPasswordForm() {
 
         if (res.success) {
             toast.success("OTP Sent to your email");
-            router.push(`/verify-otp?email=${values.email}&token=${res?.data?.accessToken}`);
+            router.push(`/verify-otp?email=${values.email}&token=${res?.data?.accessToken}&action=reset-password`);
             console.log(res)
         } else {
             toast.error(res.message || "Failed to send reset email");
@@ -51,16 +51,22 @@ export default function ForgotPasswordForm() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
                         {/* Left side - Blue div (hidden on small screens) */}
                         <div className="relative hidden lg:block min-h-[600px]">
-                            <Image
+                            {/* <Image
                                 src="/images/auth.png"
                                 alt="Authentication Image"
                                 fill
                                 className="object-cover"
-                            />
+                            /> */}
+                            <div className="absolute bg-[#C1E7F8] w-full h-full px-16 flex justify-center items-center">
+                                {/* <div className="text-justify">
+                                    <h3 className="font-semibold text-3xl pb-10">Unlock Your Data's Potential</h3>
+                                    <p className="text-gray-600 text-base">Unlock Your Data's Potential At Quantivo, we believe great decisions start with great data. Our platform transforms complex numbers into clear, actionable insights, helping businesses like yours achieve sustainable growth. Join us to know, protect, and rule your data.</p>
+                                </div> */}
+                            </div>
                         </div>
 
                         {/* Right side - Form */}
-                        <div className="">
+                        <div className="p-8 md:p-12">
                             <div className="max-w-lg mx-auto">
                                 <h2 className="font-semibold text-3xl md:text-4xl pb-2">Forgot Password</h2>
                                 <p className="text-gray-600 mb-8">Enter your registered email address. we&apos;ll send you a code to reset your password.</p>
