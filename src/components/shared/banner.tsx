@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from '../ui/button'
+import Link from 'next/link'
 
 export default function Banner() {
     return (
@@ -14,10 +15,10 @@ export default function Banner() {
         >
             <div className="container mx-auto h-screen flex items-center">
                 <div className="lg:max-w-[55%] text-center lg:text-start">
-                    <h1 className='font-bold lg:leading-[120%] text-[30px] lg:text-6xl pb-8'>Lorem ipsum dolor sit amet, consectetur adipisicing.</h1>
-                    <p className='text-justify lg:text-start text-lg leading-[150%] pb-8'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin efficitur diam non sodales eleifend. Vivamus ut hendrerit neque. Nunc nec eleifend magna. Donec posuere nisi quis lorem pellentesque ornare.</p>
-                    <Button >
-                        Book A Demo
+                    <h1 className='font-bold lg:leading-[120%] text-[30px] lg:text-6xl pb-8'>Smarter Metrics. Sharper Business Moves.</h1>
+                    <p className='text-justify lg:text-start text-lg leading-[150%] pb-8'>We transform your raw business data into clear, actionable insights that drive real growth. Our platform automatically collects, analyzes, and visualizes your key metrics—turning complex datasets into easy-to-understand reports tailored to your goals.</p>
+                    <Button>
+                        <Link href="/solution#services">Book Now</Link>
                     </Button>
                 </div>
             </div>

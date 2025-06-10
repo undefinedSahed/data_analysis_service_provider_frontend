@@ -14,6 +14,7 @@ const navigationItems = [
     { name: "Home", href: "/" },
     { name: "Solution", href: "/solution" },
     { name: "Contact", href: "/contact" },
+    { name: "About Us", href: "/solution#about" },
     { name: "Blogs", href: "/blogs" },
 ]
 

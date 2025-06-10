@@ -16,11 +16,6 @@ export default function DataStrategyContent() {
                     >
                         Lorem ipsum dolor sit amet consectetur. Id
                     </h1>
-
-                    <p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-4xl mx-auto">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-                    </p>
                 </div>
 
 
@@ -28,24 +23,21 @@ export default function DataStrategyContent() {
                     <div className="text-center space-y-4">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Protect Your Data</h2>
                         <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                            Lorem ipsum dolor sit amet consectetur. Id vestibulum sit et magna purus. Gravida libero in semper eu
-                            egestas. Amet odio eu eget justo. Aliquam id rhoncus.
+                            We use industry-leading encryption, secure cloud infrastructure, and strict access controls to ensure your business information stays protected—at every stage of the analytics process.
                         </p>
                     </div>
 
                     <div className="text-center space-y-4">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Know Your Data</h2>
                         <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                            Lorem ipsum dolor sit amet consectetur. Id vestibulum sit et magna purus. Gravida libero in semper eu
-                            egestas. Amet odio eu eget justo. Aliquam id rhoncus.
+                            Know your data. We turn raw numbers into meaningful insights, giving you a clear view of your business performance—so you can understand what&apos;s working, spot trends early, and make confident, data-driven decisions.
                         </p>
                     </div>
 
                     <div className="text-center space-y-4">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Rule Your Data</h2>
                         <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                            Lorem ipsum dolor sit amet consectetur. Id vestibulum sit et magna purus. Gravida libero in semper eu
-                            egestas. Amet odio eu eget justo. Aliquam id rhoncus.
+                            Rule your data. Take control with powerful tools that let you organize, filter, and command your metrics with ease. Our platform puts you in the driver&apos;s seat—so you&apos;re not just watching data, you&apos;re leading with it.
                         </p>
                     </div>
                 </div>

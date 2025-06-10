@@ -13,6 +13,7 @@ import {
   Lightbulb,
   MessageSquare,
   Grid3X3,
+  Users
 } from "lucide-react"
 
 import { Sidebar, SidebarContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
@@ -50,6 +51,11 @@ const menuItems = [
     icon: CreditCard,
   },
   {
+    title: "Staffing Need",
+    url: "/dashboard/staffing-need",
+    icon: Users,
+  },
+  {
     title: "Settings",
     url: "/dashboard/settings",
     icon: Settings,
@@ -84,7 +90,7 @@ export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sideb
                       className={`h-5 w-5 ${isActive(item.url) ? "text-[#212121]" : "text-[#ffffff] group-hover:text-[#212121]"}`}
                     />
                     <span
-                      className={`text-[12px] font-medium ${isActive(item.url) ? "text-[#212121]" : "text-[#ffffff] group-hover:text-[#212121]"}`}
+                      className={`text-[12px] font-medium text-center ${isActive(item.url) ? "text-[#212121]" : "text-[#ffffff] group-hover:text-[#212121]"}`}
                     >
                       {item.title}
                     </span>
