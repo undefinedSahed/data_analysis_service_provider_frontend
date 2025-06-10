@@ -16,9 +16,6 @@ export default function DetailsBanner({ serviceId }: { serviceId: string }) {
         select: selectedService => selectedService?.data
     })
 
-    console.log(service)
-
-
     return (
         <section className='py-8 pt-36 lg:pb-2'>
             <div className="container mx-auto">
@@ -35,12 +32,11 @@ export default function DetailsBanner({ serviceId }: { serviceId: string }) {
                         <div className="lg:w-2/5 text-center lg:text-start">
                             <h2 className='text-2xl lg:text-6xl font-bold pb-4'>{service.serviceTitle}</h2>
                             <p className='text-xl text-[#424242] pb-4 text-justify lg:text-start'>{service.serviceDescription}</p>
-                            <h5 className='text-xl font-semibold pb-4'>Price: ${service.price}</h5>
-                            <div className="flex gap-4 justify-center lg:justify-start">
-                                <Button className='bg-primary text-white font-bold text-base'>Book A Demo</Button>
+                            <div className="flex gap-4 justify-center lg:justify-start items-center">
                                 <Link href={`/checkout?serviceId=${service._id}`}>
                                     <Button className='bg-primary text-white font-bold text-base'>Book Now</Button>
                                 </Link>
+                                <h5 className='text-xl font-semibold'>Price: ${service.price}</h5>
                             </div>
                         </div>
                         <div className="lg:w-3/5">

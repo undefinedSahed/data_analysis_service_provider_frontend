@@ -69,7 +69,7 @@ export async function updatePassword(data: { currentPassword: string; newPasswor
 
 
 // Solutions API
-export async function fetchSolutions(page = 1, limit = 5) { 
+export async function fetchSolutions(page = 1, limit = 5) {
   try {
     const response = await api.get(`/solution/get?page=${page}&limit=${limit}`)
     return response.data
@@ -122,6 +122,26 @@ export async function createStaffingNeed(data: {
     return response.data
   } catch (error: any) {
     throw new Error(error.message || "Failed to create staffing need")
+  }
+}
+
+
+export async function fetchAllStaffingNeed(page = 1, limit = 6) {
+  try {
+    const response = await api.get(`/needed-staff/get?page=${page}&limit=${limit}`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch staffing needs")
+  }
+}
+
+
+export async function fetchUserStaffingNeed(page = 1, limit = 6) {
+  try {
+    const response = await api.get(`/needed-staff/my-needed-staff?page=${page}&limit=${limit}`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch staffing needs")
   }
 }
 
