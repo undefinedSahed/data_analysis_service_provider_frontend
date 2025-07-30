@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { fetchStrategies, deleteStrategy } from "@/lib/api"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Trash2, MessageSquare } from "lucide-react"
-import { toast } from "sonner"
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchStrategies, deleteStrategy } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Trash2, MessageSquare } from "lucide-react";
+import { toast } from "sonner";
 import {
   Pagination,
   PaginationContent,
@@ -14,7 +14,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
+} from "@/components/ui/pagination";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,50 +25,56 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 export default function StrategyPage() {
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [selectedStrategy, setSelectedStrategy] = useState<any>(null)
-  const [response, setResponse] = useState("")
-  const queryClient = useQueryClient()
+  const [selectedStrategy, setSelectedStrategy] = useState<any>(null);
+  const [response, setResponse] = useState("");
+  const queryClient = useQueryClient();
 
   const { data: strategiesData, isLoading } = useQuery({
     queryKey: ["strategies", currentPage],
     queryFn: () => fetchStrategies(currentPage, 10),
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: deleteStrategy,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["strategies"] })
-      toast.success("Strategy deleted successfully")
+      queryClient.invalidateQueries({ queryKey: ["strategies"] });
+      toast.success("Strategy deleted successfully");
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
-      toast.error(error.message || "Failed to delete strategy")
+      toast.error(error.message || "Failed to delete strategy");
     },
-  })
+  });
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate(id)
-  }
+    deleteMutation.mutate(id);
+  };
 
   const handleSendResponse = () => {
     if (!response.trim()) {
-      toast.error("Please enter a response")
-      return
+      toast.error("Please enter a response");
+      return;
     }
 
     // Here you would typically send the response via API
-    toast.success("Response sent successfully")
-    setResponse("")
-    setSelectedStrategy(null)
-  }
+    toast.success("Response sent successfully");
+    setResponse("");
+    setSelectedStrategy(null);
+  };
 
   if (isLoading) {
     return (
@@ -82,11 +88,11 @@ export default function StrategyPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
-  const strategies = strategiesData?.data || []
-  const meta = strategiesData?.meta || {}
+  const strategies = strategiesData?.data || [];
+  const meta = strategiesData?.meta || {};
 
   return (
     <div className="p-6 space-y-6">
@@ -107,17 +113,25 @@ export default function StrategyPage() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="border-t border-gray-200 mb-4"></div>
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {strategies.map((strategy: any) => (
-            <div key={strategy._id} className="grid grid-cols-12 gap-4 items-center py-4 border-b last:border-b-0">
+            <div
+              key={strategy._id}
+              className="grid grid-cols-12 gap-4 items-center py-4 border-b last:border-b-0"
+            >
               <div className="col-span-2">
                 <div>
                   <p className="font-medium text-gray-900">{strategy.name}</p>
                   <p className="text-sm text-gray-600">{strategy.email}</p>
                 </div>
               </div>
-              <div className="col-span-2 text-sm text-gray-900">{strategy.companyName}</div>
-              <div className="col-span-2 text-sm text-gray-900">{strategy.dataStrategy}</div>
+              <div className="col-span-2 text-sm text-gray-900">
+                {strategy.companyName}
+              </div>
+              <div className="col-span-2 text-sm text-gray-900">
+                {strategy.dataStrategy}
+              </div>
               <div className="col-span-3 text-sm text-gray-600">
                 <p className="line-clamp-2">{strategy.strategyDescription}</p>
               </div>
@@ -133,7 +147,11 @@ export default function StrategyPage() {
               <div className="col-span-1 flex items-center gap-2">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="ghost" size="sm" onClick={() => setSelectedStrategy(strategy)}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectedStrategy(strategy)}
+                    >
                       <MessageSquare className="w-4 h-4" />
                     </Button>
                   </DialogTrigger>
@@ -143,7 +161,9 @@ export default function StrategyPage() {
                     </DialogHeader>
                     <div className="space-y-4">
                       <div className="p-4 bg-gray-50 rounded-lg">
-                        <p className="text-sm text-gray-700">{selectedStrategy?.strategyDescription}</p>
+                        <p className="text-sm text-gray-700">
+                          {selectedStrategy?.strategyDescription}
+                        </p>
                       </div>
                       <div>
                         <Label htmlFor="response">Answer</Label>
@@ -155,7 +175,10 @@ export default function StrategyPage() {
                           rows={4}
                         />
                       </div>
-                      <Button onClick={handleSendResponse} className="w-full bg-blue-500 hover:bg-blue-600">
+                      <Button
+                        onClick={handleSendResponse}
+                        className="w-full bg-blue-500 hover:bg-blue-600"
+                      >
                         Send
                       </Button>
                     </div>
@@ -163,7 +186,11 @@ export default function StrategyPage() {
                 </Dialog>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-600 hover:text-red-700"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </AlertDialogTrigger>
@@ -171,7 +198,8 @@ export default function StrategyPage() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the strategy.
+                        This action cannot be undone. This will permanently
+                        delete the strategy.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -197,7 +225,11 @@ export default function StrategyPage() {
             <PaginationItem>
               <PaginationPrevious
                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                className={
+                  currentPage === 1
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
               />
             </PaginationItem>
             {[...Array(meta.totalPages)].map((_, i) => (
@@ -213,8 +245,14 @@ export default function StrategyPage() {
             ))}
             <PaginationItem>
               <PaginationNext
-                onClick={() => setCurrentPage(Math.min(meta.totalPages, currentPage + 1))}
-                className={currentPage === meta.totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                onClick={() =>
+                  setCurrentPage(Math.min(meta.totalPages, currentPage + 1))
+                }
+                className={
+                  currentPage === meta.totalPages
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
               />
             </PaginationItem>
           </PaginationContent>
@@ -222,8 +260,9 @@ export default function StrategyPage() {
       )}
 
       <div className="text-sm text-gray-600">
-        Showing {(currentPage - 1) * 10 + 1} to {Math.min(currentPage * 10, meta.total)} of {meta.total} results
+        Showing {(currentPage - 1) * 10 + 1} to{" "}
+        {Math.min(currentPage * 10, meta.total)} of {meta.total} results
       </div>
     </div>
-  )
+  );
 }

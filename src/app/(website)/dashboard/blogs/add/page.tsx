@@ -1,74 +1,75 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useMutation } from "@tanstack/react-query"
-import { createBlog } from "@/lib/api"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { toast } from "sonner"
-import { Upload, Save } from "lucide-react"
-import Image from "next/image"
-import { RichTextEditor } from "@/components/dashboard/rich-text-editor"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { createBlog } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import { Upload, Save } from "lucide-react";
+import Image from "next/image";
+import { RichTextEditor } from "@/components/dashboard/rich-text-editor";
 
 export default function AddBlogPage() {
-  const router = useRouter()
+  const router = useRouter();
   const [formData, setFormData] = useState({
     blogTitle: "",
     blogDescription: "",
-  })
-  const [image, setImage] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  });
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const createMutation = useMutation({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mutationFn: ({ data, image }: { data: any; image?: File }) => createBlog(data, image),
+    mutationFn: ({ data, image }: { data: any; image?: File }) =>
+      createBlog(data, image),
     onSuccess: () => {
-      toast.success("Blog created successfully")
-      router.push("/dashboard/blogs")
+      toast.success("Blog created successfully");
+      router.push("/dashboard/blogs");
     },
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
-      toast.error(error.message || "Failed to create blog")
+      toast.error(error.message || "Failed to create blog");
     },
-  })
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleDescriptionChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, blogDescription: value }))
-  }
+    setFormData((prev) => ({ ...prev, blogDescription: value }));
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      setImage(file)
-      const reader = new FileReader()
+      setImage(file);
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!formData.blogTitle || !formData.blogDescription) {
-      toast.error("Please fill in all required fields")
-      return
+      toast.error("Please fill in all required fields");
+      return;
     }
 
-    createMutation.mutate({ data: formData, image: image || undefined })
-  }
+    createMutation.mutate({ data: formData, image: image || undefined });
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -77,7 +78,10 @@ export default function AddBlogPage() {
         <p className="text-gray-600 mt-1">Dashboard &gt; Blogs &gt; Add Blog</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+      >
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
@@ -90,6 +94,7 @@ export default function AddBlogPage() {
                   id="blogTitle"
                   name="blogTitle"
                   placeholder="Type Blog Title here..."
+                  className="mt-2"
                   value={formData.blogTitle}
                   onChange={handleInputChange}
                   required
@@ -130,8 +135,8 @@ export default function AddBlogPage() {
                       type="button"
                       variant="outline"
                       onClick={() => {
-                        setImage(null)
-                        setImagePreview(null)
+                        setImage(null);
+                        setImagePreview(null);
                       }}
                     >
                       Remove Image
@@ -141,28 +146,42 @@ export default function AddBlogPage() {
                   <div className="space-y-4">
                     <Upload className="w-12 h-12 text-blue-500 mx-auto" />
                     <div>
-                      <p className="text-gray-600">Drag and drop image here, or click add image</p>
+                      <p className="text-gray-600">
+                        Drag and drop image here, or click add image
+                      </p>
                       <Button
                         type="button"
                         className="mt-2 bg-blue-500 hover:bg-blue-600"
-                        onClick={() => document.getElementById("image-upload")?.click()}
+                        onClick={() =>
+                          document.getElementById("image-upload")?.click()
+                        }
                       >
                         Add Image
                       </Button>
                     </div>
                   </div>
                 )}
-                <input id="image-upload" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+                <input
+                  id="image-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
               </div>
             </CardContent>
           </Card>
 
-          <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600" disabled={createMutation.isPending}>
+          <Button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600"
+            disabled={createMutation.isPending}
+          >
             <Save className="w-4 h-4 mr-2" />
             {createMutation.isPending ? "Saving..." : "Save"}
           </Button>
         </div>
       </form>
     </div>
-  )
+  );
 }

@@ -9,6 +9,7 @@ const navigation = [
     { name: "Payment", href: "/account/payment" },
     { name: "Staffing Need", href: "/account/staffing-need" },
     { name: "Strategy Solutions", href: "/account/strategy-solutions" },
+    { name: "My Data Sets", href: "/account/data-sets" },
 ]
 
 export default function AccountsLayout({

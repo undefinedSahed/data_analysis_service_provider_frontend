@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import type * as React from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useState } from "react"
+import type * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
   LayoutDashboard,
   Settings,
@@ -13,11 +13,19 @@ import {
   Lightbulb,
   MessageSquare,
   Grid3X3,
-  Users
-} from "lucide-react"
+  Users,
+  Database
+} from "lucide-react";
 
-import { Sidebar, SidebarContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
-import { signOut } from "next-auth/react"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { signOut } from "next-auth/react";
+import Image from "next/image";
 
 const menuItems = [
   {
@@ -51,6 +59,11 @@ const menuItems = [
     icon: CreditCard,
   },
   {
+    title: "Data Sets",
+    url: "/dashboard/data-sets",
+    icon: Database,
+  },
+  {
     title: "Staffing Need",
     url: "/dashboard/staffing-need",
     icon: Users,
@@ -60,25 +73,34 @@ const menuItems = [
     url: "/dashboard/settings",
     icon: Settings,
   },
-]
+];
 
-export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const pathname = usePathname()
-  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false)
+export function DashboardSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
 
-  const isActive = (path: string) => pathname === path
+  const isActive = (path: string) => pathname === path;
 
   const handleLogout = async () => {
-
-    await signOut({ callbackUrl: "/" })
-
-  }
+    await signOut({ callbackUrl: "/" });
+  };
 
   return (
     <>
       <Sidebar className="border-r-0 w-[108px]" collapsible="none" {...props}>
         <SidebarContent className="p-4 bg-[#131313]">
-          <SidebarMenu className="space-y-2 pt-[100px]">
+          <Link href={"/dashboard"} className="text-white">
+            <Image
+              src="/images/logo.png"
+              alt="Logo"
+              width={80}
+              height={80}
+              className="mx-auto h-[80px] w-[80px] object-contain mb-4"
+            />
+          </Link>
+          <SidebarMenu className="space-y-2 ">
             {menuItems.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
@@ -87,10 +109,18 @@ export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sideb
                 >
                   <Link href={item.url} className="flex flex-col items-center">
                     <item.icon
-                      className={`h-5 w-5 ${isActive(item.url) ? "text-[#212121]" : "text-[#ffffff] group-hover:text-[#212121]"}`}
+                      className={`h-5 w-5 ${
+                        isActive(item.url)
+                          ? "text-[#212121]"
+                          : "text-[#ffffff] group-hover:text-[#212121]"
+                      }`}
                     />
                     <span
-                      className={`text-[12px] font-medium text-center ${isActive(item.url) ? "text-[#212121]" : "text-[#ffffff] group-hover:text-[#212121]"}`}
+                      className={`text-[12px] font-medium text-center ${
+                        isActive(item.url)
+                          ? "text-[#212121]"
+                          : "text-[#ffffff] group-hover:text-[#212121]"
+                      }`}
                     >
                       {item.title}
                     </span>
@@ -110,7 +140,9 @@ export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sideb
               >
                 <div className="flex flex-col items-center">
                   <LogOut className="h-5 w-5 text-[#ffffff] group-hover:text-[#212121]" />
-                  <span className="text-[12px] font-medium text-[#ffffff] group-hover:text-[#212121]">Logout</span>
+                  <span className="text-[12px] font-medium text-[#ffffff] group-hover:text-[#212121]">
+                    Logout
+                  </span>
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -123,7 +155,9 @@ export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sideb
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg">
             <h3 className="text-lg font-medium mb-4">Confirm Logout</h3>
-            <p className="text-gray-600 mb-6">Are you sure you want to logout?</p>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to logout?
+            </p>
             <div className="flex gap-4">
               <button
                 onClick={() => setIsLogoutDialogOpen(false)}
@@ -133,8 +167,8 @@ export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sideb
               </button>
               <button
                 onClick={() => {
-                  handleLogout()
-                  setIsLogoutDialogOpen(false)
+                  handleLogout();
+                  setIsLogoutDialogOpen(false);
                 }}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
               >
@@ -145,5 +179,5 @@ export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sideb
         </div>
       )}
     </>
-  )
+  );
 }

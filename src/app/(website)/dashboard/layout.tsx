@@ -28,7 +28,6 @@ export default function DashboardLayout({
             <main className="md:ml-[15px]">{children}</main>
           </div>
         </div>
-
       </SidebarProvider>
     </div>
   )

@@ -50,17 +50,17 @@ export function PaymentTable({ payments, pagination, currentPage, onPageChange }
                     {payments?.data?.map((payment) => (
                         <TableRow key={payment._id}>
                             <TableCell className="text-center">
-                                <span className="text-gray-900">{payment.serviceId.serviceTitle}</span>
+                                <span className="text-gray-900">{payment?.serviceId?.serviceTitle}</span>
                             </TableCell>
                             <TableCell className="text-center">
-                                <span className="text-gray-900">${payment.amount}</span>
+                                <span className="text-gray-900">${payment?.amount}</span>
                             </TableCell>
                             <TableCell className="text-center">
                                 <span className="text-gray-600">Stripe</span>
                             </TableCell>
                             <TableCell className="text-center">
                                 <div className="text-sm text-gray-600">
-                                    {new Date(payment.createdAt)
+                                    {new Date(payment?.createdAt)
                                         .toLocaleString("en-GB", {
                                             day: "2-digit",
                                             month: "2-digit",

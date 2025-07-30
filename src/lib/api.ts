@@ -356,7 +356,6 @@ export async function fetchAllPayments(page = 1, limit = 5) {
   } catch (error: any) {
     throw new Error(error.message || "Failed to fetch payments")
   }
-
 }
 
 
@@ -379,3 +378,72 @@ export async function fetchUserPayments(page = 1, limit = 5) {
     throw new Error(error.message || "Failed to fetch payments")
   }
 }
+
+
+
+
+// Data set api
+
+export async function createDataSet(data: any, userId: string) {
+  try {
+    const response = await api.post(`data-set/create/${userId}`, data) 
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to create data set")
+  }
+}
+
+
+// get all data set for admin
+export async function fetchDataSets(page = 1, limit = 5) {
+  try {
+    const response = await api.get(`/data-set/all?page=${page}&limit=${limit}`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch data sets")
+  }
+}
+
+
+// get single dataset
+export async function fetchDataSet(id: string) {
+  try {
+    const response = await api.get(`/data-set/${id}`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch data set")
+  }
+}
+
+
+// get user all data set
+export async function fetchUserDataSet(page = 1, limit = 5) {
+  try {
+    const response = await api.get(`/data-set/my?page=${page}&limit=${limit}`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to fetch data sets")
+  }
+}
+
+
+// delete data set
+export async function deleteDataSet(id: string) {
+  try {
+    const response = await api.delete(`/data-set/delete/${id}`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to delete data set")
+  }
+}
+
+
+// update data set 
+export async function updateDataSet(id: string, data: any) {
+  try {
+    const response = await api.put(`/data-set/update/${id}`, data)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to update data set")
+  }
+} 

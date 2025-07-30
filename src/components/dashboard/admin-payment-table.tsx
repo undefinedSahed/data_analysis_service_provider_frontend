@@ -62,7 +62,7 @@ export function AdminPaymentTable({ payments, pagination, currentPage, onPageCha
                                 </div>
                             </TableCell>
                             <TableCell className="text-center">
-                                <span className="text-gray-900">{payment.serviceId.serviceTitle}</span>
+                                <span className="text-gray-900">{payment?.serviceId?.serviceTitle}</span>
                             </TableCell>
                             <TableCell className="text-center">
                                 <span className="font-medium text-gray-900">${payment.amount}</span>

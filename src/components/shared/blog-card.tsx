@@ -1,35 +1,42 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "lucide-react"
-import Image from "next/image"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "lucide-react";
+import Image from "next/image";
 
 interface Blog {
-  _id: string
-  blogTitle: string
-  blogDescription: string
-  imageLink: string
-  createdAt: string
+  _id: string;
+  blogTitle: string;
+  blogDescription: string;
+  imageLink: string;
+  createdAt: string;
 }
 
 interface BlogCardProps {
-  blog: Blog
+  blog: Blog;
 }
 
 export function BlogCard({ blog }: BlogCardProps) {
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
+    const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "2-digit",
-    })
-  }
+    });
+  };
 
   const truncateDescription = (text: string, maxLength = 120) => {
-    if (text?.length <= maxLength) return text
-    return text?.substring(0, maxLength) + "..."
-  }
+    if (!text) return ""; // Handle cases where text is null or undefined
 
+    // First, remove HTML tags
+    const cleanText = text.replace(/<[^>]*>?/gm, "");
+
+    // Then, check the length and truncate
+    if (cleanText.length <= maxLength) {
+      return cleanText;
+    }
+    return cleanText.substring(0, maxLength) + "...";
+  };
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-lg transition-shadow duration-300 group">
       <div className="relative h-72 overflow-hidden">
@@ -48,9 +55,13 @@ export function BlogCard({ blog }: BlogCardProps) {
           {formatDate(blog?.createdAt)}
         </div>
 
-        <h3 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight">{blog?.blogTitle}</h3>
+        <h3 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight">
+          {blog?.blogTitle}
+        </h3>
 
-        <p className="text-gray-600 mb-6 leading-relaxed">{truncateDescription(blog?.blogDescription)}</p>
+        <p className="text-gray-600 mb-6 leading-relaxed">
+          {truncateDescription(blog?.blogDescription)}
+        </p>
 
         <Link href={`/blogs/${blog?._id}`}>
           <Button
@@ -62,5 +73,5 @@ export function BlogCard({ blog }: BlogCardProps) {
         </Link>
       </div>
     </div>
-  )
+  );
 }

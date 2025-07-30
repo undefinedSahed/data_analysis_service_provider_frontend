@@ -1,19 +1,17 @@
-"use client"
-
+"use client";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type React from "react"
-import { useState } from "react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { fetchBlogs, deleteBlog, updateBlog } from "@/lib/api"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Edit, Trash2, Plus, Eye, Upload } from "lucide-react"
-import { toast } from "sonner"
-import Link from "next/link"
-import Image from "next/image"
+import type React from "react";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchBlogs, deleteBlog, updateBlog } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Edit, Trash2, Plus, Eye, Upload } from "lucide-react";
+import { toast } from "sonner";
+import Link from "next/link";
+import Image from "next/image";
 import {
   Pagination,
   PaginationContent,
@@ -21,7 +19,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
+} from "@/components/ui/pagination";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,125 +30,137 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { RichTextEditor } from "@/components/dashboard/rich-text-editor"
-
+} from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { RichTextEditor } from "@/components/dashboard/rich-text-editor";
 
 interface Meta {
-  total: number
-  page: number
-  limit: number
-  totalPages: number
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
 export default function BlogsPage() {
-  const [currentPage, setCurrentPage] = useState(1)
-  const queryClient = useQueryClient()
+  const [currentPage, setCurrentPage] = useState(1);
+  const queryClient = useQueryClient();
 
   // Edit state
-  const [editingBlog, setEditingBlog] = useState<any>(null)
+  const [editingBlog, setEditingBlog] = useState<any>(null);
   const [editFormData, setEditFormData] = useState({
     blogTitle: "",
     blogDescription: "",
-  })
-  const [editImage, setEditImage] = useState<File | null>(null)
-  const [editImagePreview, setEditImagePreview] = useState<string | null>(null)
+  });
+  const [editImage, setEditImage] = useState<File | null>(null);
+  const [editImagePreview, setEditImagePreview] = useState<string | null>(null);
 
   // View state
-  const [viewingBlog, setViewingBlog] = useState<any>(null)
-  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [viewingBlog, setViewingBlog] = useState<any>(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const { data: blogsData, isLoading } = useQuery({
     queryKey: ["blogs", currentPage],
     queryFn: () => fetchBlogs(currentPage, 10),
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: deleteBlog,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["blogs"] })
-      toast.success("Blog deleted successfully")
+      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+      toast.success("Blog deleted successfully");
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to delete blog")
+      toast.error(error.message || "Failed to delete blog");
     },
-  })
+  });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data, image }: { id: string; data: any; image?: File }) => updateBlog(id, data, image),
+    mutationFn: ({
+      id,
+      data,
+      image,
+    }: {
+      id: string;
+      data: any;
+      image?: File;
+    }) => updateBlog(id, data, image),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["blogs"] })
-      toast.success("Blog updated successfully")
-      setIsEditDialogOpen(false)
-      setEditingBlog(null)
-      setEditFormData({ blogTitle: "", blogDescription: "" })
-      setEditImage(null)
-      setEditImagePreview(null)
+      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+      toast.success("Blog updated successfully");
+      setIsEditDialogOpen(false);
+      setEditingBlog(null);
+      setEditFormData({ blogTitle: "", blogDescription: "" });
+      setEditImage(null);
+      setEditImagePreview(null);
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to update blog")
+      toast.error(error.message || "Failed to update blog");
     },
-  })
+  });
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate(id)
-  }
+    deleteMutation.mutate(id);
+  };
 
   const handleViewClick = (blog: any) => {
-    setViewingBlog(blog)
-    setIsViewDialogOpen(true)
-  }
+    setViewingBlog(blog);
+    setIsViewDialogOpen(true);
+  };
 
   const handleEditClick = (blog: any) => {
-    setEditingBlog(blog)
+    setEditingBlog(blog);
     setEditFormData({
       blogTitle: blog.blogTitle,
       blogDescription: blog.blogDescription,
-    })
-    setEditImagePreview(blog.imageLink)
-    setEditImage(null)
-    setIsEditDialogOpen(true)
-  }
+    });
+    setEditImagePreview(blog.imageLink);
+    setEditImage(null);
+    setIsEditDialogOpen(true);
+  };
 
   const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setEditFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setEditFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleEditDescriptionChange = (value: string) => {
-    setEditFormData((prev) => ({ ...prev, blogDescription: value }))
-  }
+    setEditFormData((prev) => ({ ...prev, blogDescription: value }));
+  };
 
   const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      setEditImage(file)
-      const reader = new FileReader()
+      setEditImage(file);
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setEditImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+        setEditImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleEditSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!editFormData.blogTitle || !editFormData.blogDescription) {
-      toast.error("Please fill in all required fields")
-      return
+      toast.error("Please fill in all required fields");
+      return;
     }
 
     updateMutation.mutate({
       id: editingBlog._id,
       data: editFormData,
       image: editImage || undefined,
-    })
-  }
+    });
+  };
 
   if (isLoading) {
     return (
@@ -164,11 +174,16 @@ export default function BlogsPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
-  const blogs = blogsData?.data || []
-  const meta: Meta = blogsData?.meta || { total: 0, page: 0, limit: 0, totalPages: 0 }
+  const blogs = blogsData?.data || [];
+  const meta: Meta = blogsData?.meta || {
+    total: 0,
+    page: 0,
+    limit: 0,
+    totalPages: 0,
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -188,18 +203,20 @@ export default function BlogsPage() {
       <Card>
         <CardHeader className="pb-3">
           <div className="grid grid-cols-12 gap-4 font-medium text-gray-600">
-            <div className="col-span-5">Blog Name</div>
-            <div className="col-span-2">Views</div>
-            <div className="col-span-3">Added</div>
-            <div className="col-span-2">Actions</div>
+            <div className="col-span-7">Blog Name</div>
+            <div className="col-span-2">Added</div>
+            <div className="col-span-3 ml-4">Actions</div>
           </div>
         </CardHeader>
         <CardContent className="pt-0">
           <div className="border-t border-gray-200 mb-4"></div>
           <div className="space-y-4">
             {blogs.map((blog: any) => (
-              <div key={blog._id} className="grid grid-cols-12 gap-4 items-center py-4 border-b last:border-b-0">
-                <div className="col-span-5 flex items-center gap-3">
+              <div
+                key={blog._id}
+                className="grid grid-cols-12 gap-4 items-center py-4 border-b last:border-b-0"
+              >
+                <div className="col-span-7 flex items-center gap-3">
                   <div className="w-24 h-16 bg-gray-100 rounded-lg overflow-hidden">
                     {blog.imageLink ? (
                       <Image
@@ -214,35 +231,52 @@ export default function BlogsPage() {
                     )}
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-medium text-gray-900 line-clamp-1">{blog.blogTitle}</h3>
+                    <h3 className="font-medium text-gray-900 line-clamp-1">
+                      {blog.blogTitle}
+                    </h3>
                     <div
                       className="text-sm text-gray-600 line-clamp-2"
                       dangerouslySetInnerHTML={{
-                        __html: blog.blogDescription?.replace(/<[^>]*>/g, "").substring(0, 100) + "...",
+                        __html:
+                          blog.blogDescription
+                            ?.replace(/<[^>]*>/g, "")
+                            .substring(0, 100) + "...",
                       }}
                     />
                   </div>
                 </div>
-                <div className="col-span-2">
+                {/* <div className="col-span-2">
                   <Badge variant="secondary">45</Badge>
-                </div>
-                <div className="col-span-3 text-sm text-gray-600">
+                </div> */}
+                <div className="col-span-2 text-sm text-gray-600">
                   {new Date(blog.createdAt).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit",
                   })}
                 </div>
-                <div className="col-span-2 flex items-center gap-1">
-                  <Button variant="ghost" size="sm" onClick={() => handleViewClick(blog)}>
+                <div className="col-span-3 flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleViewClick(blog)}
+                  >
                     <Eye className="w-4 h-4" />
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleEditClick(blog)}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleEditClick(blog)}
+                  >
                     <Edit className="w-4 h-4" />
                   </Button>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-600 hover:text-red-700"
+                      >
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </AlertDialogTrigger>
@@ -250,7 +284,8 @@ export default function BlogsPage() {
                       <AlertDialogHeader>
                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete the blog.
+                          This action cannot be undone. This will permanently
+                          delete the blog.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -282,36 +317,52 @@ export default function BlogsPage() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-sm font-medium text-gray-600">Blog Title</Label>
-                    <h2 className="text-xl font-bold text-gray-900 mt-1">{viewingBlog.blogTitle}</h2>
+                    <Label className="text-sm font-medium text-gray-600">
+                      Blog Title
+                    </Label>
+                    <h2 className="text-xl font-bold text-gray-900 mt-1">
+                      {viewingBlog.blogTitle}
+                    </h2>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-600">Created At</Label>
+                    <Label className="text-sm font-medium text-gray-600">
+                      Created At
+                    </Label>
                     <p className="text-sm text-gray-700">
-                      {new Date(viewingBlog.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {new Date(viewingBlog.createdAt).toLocaleDateString(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )}
                     </p>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-600">Last Updated</Label>
+                    <Label className="text-sm font-medium text-gray-600">
+                      Last Updated
+                    </Label>
                     <p className="text-sm text-gray-700">
-                      {new Date(viewingBlog.updatedAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {new Date(viewingBlog.updatedAt).toLocaleDateString(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )}
                     </p>
                   </div>
                 </div>
                 <div>
-                  <Label className="text-sm font-medium text-gray-600">Blog Image</Label>
+                  <Label className="text-sm font-medium text-gray-600">
+                    Blog Image
+                  </Label>
                   <div className="mt-2 border rounded-lg overflow-hidden">
                     {viewingBlog.imageLink ? (
                       <Image
@@ -323,16 +374,25 @@ export default function BlogsPage() {
                       />
                     ) : (
                       <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-500">No image available</span>
+                        <span className="text-gray-500">
+                          No image available
+                        </span>
                       </div>
                     )}
                   </div>
                 </div>
               </div>
               <div>
-                <Label className="text-sm font-medium text-gray-600">Blog Content</Label>
+                <Label className="text-sm font-medium text-gray-600">
+                  Blog Content
+                </Label>
                 <div className="mt-2 p-4 bg-gray-50 rounded-lg">
-                  <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: viewingBlog.blogDescription }} />
+                  <div
+                    className="prose max-w-none"
+                    dangerouslySetInnerHTML={{
+                      __html: viewingBlog.blogDescription,
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -394,7 +454,9 @@ export default function BlogsPage() {
                     type="button"
                     variant="outline"
                     className="w-full"
-                    onClick={() => document.getElementById("edit-blog-image-upload")?.click()}
+                    onClick={() =>
+                      document.getElementById("edit-blog-image-upload")?.click()
+                    }
                   >
                     <Upload className="w-4 h-4 mr-2" />
                     Change Image
@@ -411,10 +473,18 @@ export default function BlogsPage() {
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t">
-              <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsEditDialogOpen(false)}
+              >
                 Cancel
               </Button>
-              <Button type="submit" className="bg-blue-500 hover:bg-blue-600" disabled={updateMutation.isPending}>
+              <Button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-600"
+                disabled={updateMutation.isPending}
+              >
                 {updateMutation.isPending ? "Updating..." : "Update Blog"}
               </Button>
             </div>
@@ -428,7 +498,11 @@ export default function BlogsPage() {
             <PaginationItem>
               <PaginationPrevious
                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                className={
+                  currentPage === 1
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
               />
             </PaginationItem>
             {[...Array(meta.totalPages)].map((_, i) => (
@@ -444,8 +518,14 @@ export default function BlogsPage() {
             ))}
             <PaginationItem>
               <PaginationNext
-                onClick={() => setCurrentPage(Math.min(meta.totalPages, currentPage + 1))}
-                className={currentPage === meta.totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                onClick={() =>
+                  setCurrentPage(Math.min(meta.totalPages, currentPage + 1))
+                }
+                className={
+                  currentPage === meta.totalPages
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
               />
             </PaginationItem>
           </PaginationContent>
@@ -453,8 +533,9 @@ export default function BlogsPage() {
       )}
 
       <div className="text-sm text-gray-600">
-        Showing {(currentPage - 1) * 10 + 1} to {Math.min(currentPage * 10, meta.total)} of {meta.total} results
+        Showing {(currentPage - 1) * 10 + 1} to{" "}
+        {Math.min(currentPage * 10, meta.total)} of {meta.total} results
       </div>
     </div>
-  )
+  );
 }

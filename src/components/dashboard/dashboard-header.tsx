@@ -1,32 +1,36 @@
-"use client"
-import Link from "next/link"
-import { ChevronDown, LogOut, User } from "lucide-react"
+"use client";
+import Link from "next/link";
+import { ChevronDown, LogOut, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useSession, signOut } from "next-auth/react"
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSession, signOut } from "next-auth/react";
+import { useUserProfile } from "@/hooks/use-user-profile";
 
 export function DashboardHeader() {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
+  const { profile, loading } = useUserProfile();
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/" })
-  }
+    await signOut({ callbackUrl: "/" });
+  };
 
   const getUserInitials = () => {
-    if (!session?.user?.name) return "U"
-    const names = session.user.name.split(" ")
-    const firstInitial = names[0] ? names[0][0] : ""
-    const lastInitial = names[1] ? names[1][0] : ""
-    return `${firstInitial}${lastInitial}`
-  }
+    if (!profile) return "U";
+    const firstInitial = profile.firstName ? profile.firstName[0] : "";
+    const lastInitial = profile.lastName ? profile.lastName[0] : "";
+    return `${firstInitial}${lastInitial}`.toUpperCase();
+  };
 
-  console.log(session)
+  const getFullName = () => {
+    if (!profile) return "User";
+    return `${profile.firstName} ${profile.lastName}`.trim();
+  };
 
   return (
     <header className="flex w-full items-center justify-between border-b border-[#222] bg-[#131313] p-4 backdrop-blur-xl">
@@ -38,12 +42,26 @@ export function DashboardHeader() {
             <DropdownMenuTrigger asChild>
               <div className="flex cursor-pointer items-center space-x-2">
                 <Avatar className="border border-red-600">
-                  <AvatarImage src={session.user?.image || ""} width={100} height={100} />
-                  <AvatarFallback className="bg-red-900 text-white">{getUserInitials()}</AvatarFallback>
+                  <AvatarImage
+                    src={profile?.imageLink || ""}
+                    alt={getFullName()}
+                    className="object-cover"
+                  />
+                  <AvatarFallback className="bg-red-900 text-white">
+                    {loading ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      getUserInitials()
+                    )}
+                  </AvatarFallback>
                 </Avatar>
                 <span className="hidden text-sm text-white md:block">
-                  {session.user?.name}
-                  {session.user?.role && <span className="ml-1 text-xs text-red-300">({session.user.role})</span>}
+                  {loading ? "Loading..." : getFullName()}
+                  {profile?.role && (
+                    <span className="ml-1 text-xs text-red-300">
+                      ({profile.role})
+                    </span>
+                  )}
                 </span>
                 <ChevronDown className="h-4 w-4 text-white" />
               </div>
@@ -51,10 +69,26 @@ export function DashboardHeader() {
             <DropdownMenuContent align="end" className="w-56">
               <div className="flex items-center justify-start gap-2 p-2">
                 <div className="flex flex-col space-y-1 text-left">
-                  <p className="text-sm font-medium leading-none">{session.user?.name}</p>
-                  <p className="text-xs leading-none text-muted-foreground">{session.user?.email}</p>
-                  {session.user?.role && (
-                    <p className="text-xs leading-none text-muted-foreground capitalize">Role: {session.user.role}</p>
+                  <p className="text-sm font-medium leading-none">
+                    {loading ? "Loading..." : getFullName()}
+                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {loading ? "Loading..." : profile?.email}
+                  </p>
+                  {profile?.role && (
+                    <p className="text-xs leading-none text-muted-foreground capitalize">
+                      Role: {profile.role}
+                    </p>
+                  )}
+                  {profile?.companyName && (
+                    <p className="text-xs leading-none text-muted-foreground">
+                      Company: {profile.companyName}
+                    </p>
+                  )}
+                  {profile?.phone && (
+                    <p className="text-xs leading-none text-muted-foreground">
+                      Phone: {profile.phone}
+                    </p>
                   )}
                 </div>
               </div>
@@ -62,6 +96,9 @@ export function DashboardHeader() {
               <DropdownMenuItem asChild className="cursor-pointer">
                 <Link href="/dashboard">Dashboard</Link>
               </DropdownMenuItem>
+              {/* <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/profile">Profile</Link>
+              </DropdownMenuItem> */}
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-600"
@@ -85,5 +122,5 @@ export function DashboardHeader() {
         )}
       </div>
     </header>
-  )
+  );
 }
