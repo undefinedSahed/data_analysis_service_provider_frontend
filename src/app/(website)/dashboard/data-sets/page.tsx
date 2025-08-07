@@ -1,16 +1,17 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Eye, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
+import { Plus, Eye, Edit, Trash2, ChevronLeft, ChevronRight, Loader } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { createDataSet, deleteDataSet, fetchAllPayments, fetchDataSets, updateDataSet } from "@/lib/api"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { toast } from "sonner"
 
 interface DataSet {
     _id: string
@@ -23,6 +24,7 @@ interface DataSet {
         imageLink?: string
     }
     dataSets: string
+    dataSetName: string
     createdAt: string
     updatedAt: string
 }
@@ -66,6 +68,9 @@ export default function AdminDashboard() {
     const [selectedUserId, setSelectedUserId] = useState("")
     const [uploadedFile, setUploadedFile] = useState<File | null>(null)
     const [datasetName, setDatasetName] = useState<string>("")
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+    const [datasetToDelete, setDatasetToDelete] = useState<string | null>(null)
+    const [loadingEdit, setLoadingEdit] = useState(false)
 
     const loadData = async () => {
         try {
@@ -100,7 +105,7 @@ export default function AdminDashboard() {
     }, [currentPage])
 
     const handleCreateDataSet = async () => {
-        if (!selectedUserId || !uploadedFile) return
+        if (!selectedUserId || !uploadedFile || !datasetName) return
         try {
             const formData = new FormData()
             formData.append("file", uploadedFile)
@@ -119,25 +124,41 @@ export default function AdminDashboard() {
     }
 
     const handleEditDataSet = async () => {
-        if (!selectedDataSet || !uploadedFile) return
+        if (!selectedDataSet || (!uploadedFile && !selectedDataSet.dataSetName)) return
+        setLoadingEdit(true)
         try {
             const formData = new FormData()
-            formData.append("file", uploadedFile)
+            if (uploadedFile) {
+                formData.append("file", uploadedFile)
+            }
+            formData.append("dataSetName", selectedDataSet.dataSetName)
             await updateDataSet(selectedDataSet._id, formData)
             setIsEditModalOpen(false)
             setSelectedDataSet(null)
             setUploadedFile(null)
             loadData()
+            setIsEditModalOpen(false)
         } catch (error) {
             console.error("Error updating dataset:", error)
+            if (error instanceof Error) {
+                toast.error(`Error: ${error.message}`)
+            }
+        } finally {
+            setLoadingEdit(false)
         }
     }
 
-    const handleDeleteDataSet = async (id: string) => {
-        if (!confirm("Are you sure you want to delete this dataset?")) return
+
+    const handleDeleteDataSet = (id: string) => {
+        setDatasetToDelete(id)
+        setIsDeleteDialogOpen(true)
+    }
+
+    const confirmDelete = async () => {
+        if (!datasetToDelete) return
+
         try {
-            await deleteDataSet(id)
-            // If we're on the last page and it becomes empty, go to previous page
+            await deleteDataSet(datasetToDelete)
             if (dataSets.length === 1 && currentPage > 1) {
                 setCurrentPage(currentPage - 1)
             } else {
@@ -145,8 +166,12 @@ export default function AdminDashboard() {
             }
         } catch (error) {
             console.error("Error deleting dataset:", error)
+        } finally {
+            setIsDeleteDialogOpen(false)
+            setDatasetToDelete(null)
         }
     }
+
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("en-US", {
@@ -216,23 +241,27 @@ export default function AdminDashboard() {
                             <DialogHeader>
                                 <DialogTitle>Create New Dataset</DialogTitle>
                             </DialogHeader>
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="name">Dataset Name</Label>
-                                    <Input type="text" id="name" value={datasetName} onChange={(e) => setDatasetName(e.target.value)} />
-                                    <Label htmlFor="company">Company Name</Label>
-                                    <Select value={selectedUserId} onValueChange={setSelectedUserId}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select the company" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {getUniqueUsers().map((user) => (
-                                                <SelectItem key={user._id} value={user._id}>
-                                                    {user?.companyName} ({user.email})
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                            <div className="space-y-6">
+                                <div className="space-y-6">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="name">Dataset Name</Label>
+                                        <Input type="text" id="name" value={datasetName} onChange={(e) => setDatasetName(e.target.value)} />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="company">Company Name</Label>
+                                        <Select value={selectedUserId} onValueChange={setSelectedUserId}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select the company" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {getUniqueUsers().map((user) => (
+                                                    <SelectItem key={user._id} value={user._id}>
+                                                        {user?.companyName} ({user.email})
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Upload Data Set</Label>
@@ -252,7 +281,7 @@ export default function AdminDashboard() {
                                         {uploadedFile && <p className="mt-2 text-sm text-green-600">Selected: {uploadedFile.name}</p>}
                                     </div>
                                 </div>
-                                <Button onClick={handleCreateDataSet} className="w-full" disabled={!selectedUserId || !uploadedFile}>
+                                <Button onClick={handleCreateDataSet} className="w-full" disabled={!selectedUserId || !uploadedFile || !datasetName}>
                                     Create Dataset
                                 </Button>
                             </div>
@@ -266,8 +295,9 @@ export default function AdminDashboard() {
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-gray-50">
-                                    <TableHead className="font-semibold">User Info</TableHead>
+                                    <TableHead className="font-semibold">Data Set Name</TableHead>
                                     <TableHead className="font-semibold text-center">Company Name</TableHead>
+                                    <TableHead className="font-semibold">User Info</TableHead>
                                     <TableHead className="font-semibold text-center">Added</TableHead>
                                     <TableHead className="font-semibold text-center">Actions</TableHead>
                                 </TableRow>
@@ -289,6 +319,12 @@ export default function AdminDashboard() {
                                     dataSets.map((dataSet) => (
                                         <TableRow key={dataSet._id}>
                                             <TableCell>
+                                                <span className="font-medium text-gray-900">{dataSet?.dataSetName}</span>
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="text-sm text-center">{dataSet?.userId?.companyName}</div>
+                                            </TableCell>
+                                            <TableCell>
                                                 <div className="flex items-center space-x-3">
                                                     <Avatar>
                                                         <AvatarImage
@@ -305,9 +341,6 @@ export default function AdminDashboard() {
                                                         <div className="text-sm text-gray-500">{dataSet?.userId?.email || "Email address"}</div>
                                                     </div>
                                                 </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="text-sm text-center">{dataSet?.userId?.companyName}</div>
                                             </TableCell>
                                             <TableCell>
                                                 <div className="text-sm text-center">{formatDate(dataSet.createdAt)}</div>
@@ -386,7 +419,25 @@ export default function AdminDashboard() {
                             <DialogTitle>Edit Dataset</DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4">
-                            <div>
+                            <div className="space-y-2">
+                                <Label>Dataset Name</Label>
+                                <Input
+                                    value={selectedDataSet?.dataSetName || ""}
+                                    onChange={(e) =>
+                                        selectedDataSet &&
+                                        setSelectedDataSet({
+                                            ...selectedDataSet,
+                                            dataSetName: e.target.value,
+                                            _id: selectedDataSet._id,
+                                            userId: selectedDataSet.userId,
+                                            dataSets: selectedDataSet.dataSets,
+                                            createdAt: selectedDataSet.createdAt,
+                                            updatedAt: selectedDataSet.updatedAt,
+                                        })
+                                    }
+                                />
+                            </div>
+                            <div className="space-y-2">
                                 <Label>Upload New Data Set</Label>
                                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                                     <Input
@@ -397,20 +448,37 @@ export default function AdminDashboard() {
                                         id="edit-file-upload"
                                     />
                                     <Label htmlFor="edit-file-upload" className="cursor-pointer">
-                                        <div className="space-y-2">
-                                            <div className="text-gray-500">Upload your JSON file</div>
-                                            <Button type="button" variant="outline">
-                                                Upload
-                                            </Button>
+                                        <div className="">
+                                            <div className="text-gray-500 py-4">Click & Upload your JSON file</div>
                                         </div>
                                     </Label>
                                     {uploadedFile && <p className="mt-2 text-sm text-green-600">Selected: {uploadedFile.name}</p>}
                                 </div>
                             </div>
-                            <Button onClick={handleEditDataSet} className="w-full" disabled={!uploadedFile}>
-                                Update Dataset
+                            <Button onClick={handleEditDataSet} className="w-full" disabled={!selectedDataSet?.dataSetName && !uploadedFile}>
+                                {loadingEdit ? <div className="flex items-center gap-2"><Loader className="w-4 h-4 animate-spin" /> Updating</div> : "Update Dataset"}
                             </Button>
                         </div>
+                    </DialogContent>
+                </Dialog>
+
+                {/* Delete Modal */}
+                <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Delete Dataset</DialogTitle>
+                            <DialogDescription>
+                                Are you sure you want to delete this dataset? This action cannot be undone.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <Button variant="secondary" onClick={() => setIsDeleteDialogOpen(false)}>
+                                Cancel
+                            </Button>
+                            <Button variant="destructive" onClick={confirmDelete}>
+                                Delete
+                            </Button>
+                        </DialogFooter>
                     </DialogContent>
                 </Dialog>
             </div>

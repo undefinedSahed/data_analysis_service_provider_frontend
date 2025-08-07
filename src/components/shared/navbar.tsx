@@ -70,14 +70,20 @@ export default function Navbar() {
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`${
-                        isActive ? "text-cyan-400" : "text-white"
-                      } px-3 py-2 text-lg font-medium transition-colors duration-200 hover:text-cyan-400`}
+                      className={`${isActive ? "text-cyan-400" : "text-white"
+                        } px-3 py-2 text-lg font-medium transition-colors duration-200 hover:text-cyan-400`}
                     >
                       {item.name}
                     </Link>
                   );
                 })}
+                <div className="text-white text-lg font-medium transition-colors duration-200 hover:text-cyan-400">
+                  {session?.user?.role === "user" && (
+                    <Link href="/account/data-sets">
+                      My Data Sets
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -240,9 +246,8 @@ export default function Navbar() {
                         <Link
                           key={item.name}
                           href={item.href}
-                          className={`${
-                            isActive ? "text-cyan-400" : "text-foreground"
-                          } text-lg font-medium hover:text-cyan-600 transition-colors duration-200`}
+                          className={`${isActive ? "text-cyan-400" : "text-foreground"
+                            } text-lg font-medium hover:text-cyan-600 transition-colors duration-200`}
                           onClick={() => setIsOpen(false)}
                         >
                           {item.name}

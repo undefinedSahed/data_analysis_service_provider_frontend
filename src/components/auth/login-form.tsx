@@ -60,7 +60,7 @@ export default function LoginForm() {
         const session = await getSession();
 
         toast.success("Login successful");
-        router.push(session?.user?.role === "admin" ? "/dashboard" : "/");
+        router.push(session?.user?.role === "admin" ? "/dashboard" : "/account/data-sets");
       }
     } catch (error) {
       toast.error("An unexpected error occurred");

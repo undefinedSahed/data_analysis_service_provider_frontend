@@ -17,6 +17,7 @@ interface DataSet {
         companyName?: string
     }
     dataSets: string
+    dataSetName: string
     createdAt: string
 }
 
@@ -438,7 +439,7 @@ export default function UserDashboard() {
                                         <SelectContent>
                                             {dataSets.map((dataSet) => (
                                                 <SelectItem key={dataSet._id} value={dataSet._id}>
-                                                    {dataSet.userId.companyName || "Dataset"} - {new Date(dataSet.createdAt).toLocaleDateString()}
+                                                    {dataSet.dataSetName || "Dataset"} - {new Date(dataSet.createdAt).toLocaleDateString()}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
