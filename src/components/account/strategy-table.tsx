@@ -51,6 +51,20 @@ export function StrategyTable({ strategySolutions, pagination, currentPage, onPa
         setSelectedStrategy(null)
     }
 
+    if (!strategySolutions?.data) {
+        return (
+            <div className="border border-gray-200 rounded-lg overflow-hidden">
+                <Table>
+                    <TableHeader className="bg-gray-50">
+                        <TableRow>
+                            <TableHead className="text-center">No Data Strategy Solutions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                </Table>
+            </div>
+        )
+    }
+
     return (
         <>
             <div className="border border-gray-200 rounded-lg overflow-hidden">
@@ -67,26 +81,26 @@ export function StrategyTable({ strategySolutions, pagination, currentPage, onPa
                     </TableHeader>
                     <TableBody>
                         {strategySolutions?.data?.map((item) => (
-                            <TableRow key={item._id}>
+                            <TableRow key={item?._id}>
                                 <TableCell>
                                     <div className="text-sm">
-                                        <div className="font-medium text-gray-900">{item.name}</div>
-                                        <div className="text-gray-600">{item.email}</div>
+                                        <div className="font-medium text-gray-900">{item?.name}</div>
+                                        <div className="text-gray-600">{item?.email}</div>
                                     </div>
                                 </TableCell>
                                 <TableCell className="text-center">
-                                    <div className="text-sm text-gray-600 capitalize">{item.dataStrategy}</div>
+                                    <div className="text-sm text-gray-600 capitalize">{item?.dataStrategy}</div>
                                 </TableCell>
                                 <TableCell className="text-center">
-                                    <div className="text-sm text-gray-600 max-w-xs truncate">{item.strategyDescription}</div>
+                                    <div className="text-sm text-gray-600 max-w-xs truncate">{item?.strategyDescription}</div>
                                 </TableCell>
                                 <TableCell className="text-center">
-                                    <div className="text-sm text-gray-600 max-w-xs truncate">{item.answer ?? "-"}</div>
+                                    <div className="text-sm text-gray-600 max-w-xs truncate">{item?.answer ?? "-"}</div>
                                 </TableCell>
                                 <TableCell className="text-center">
                                     <div className="text-sm text-gray-600">
                                         <div className="text-sm text-gray-600">
-                                            {new Date(item.createdAt)
+                                            {new Date(item?.createdAt)
                                                 .toLocaleString("en-GB", {
                                                     day: "2-digit",
                                                     month: "2-digit",
@@ -115,9 +129,9 @@ export function StrategyTable({ strategySolutions, pagination, currentPage, onPa
                 <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
                     <CustomPagination
                         currentPage={currentPage}
-                        totalPages={pagination.totalPages}
-                        perPage={pagination.itemsPerPage}
-                        totalItems={pagination.totalItems}
+                        totalPages={pagination?.totalPages}
+                        perPage={pagination?.itemsPerPage}
+                        totalItems={pagination?.totalItems}
                         onPageChange={onPageChange}
                     />
                 </div>
@@ -135,10 +149,10 @@ export function StrategyTable({ strategySolutions, pagination, currentPage, onPa
                             {/* User Info */}
                             <div className="border-b border-gray-200 pb-4">
                                 <div className="text-sm">
-                                    <div className="font-medium text-gray-900">{selectedStrategy.name}</div>
-                                    <div className="text-gray-600">{selectedStrategy.email}</div>
+                                    <div className="font-medium text-gray-900">{selectedStrategy?.name}</div>
+                                    <div className="text-gray-600">{selectedStrategy?.email}</div>
                                     <div className="text-gray-500 mt-1">
-                                        Focus Area: <span className="capitalize">{selectedStrategy.dataStrategy}</span>
+                                        Focus Area: <span className="capitalize">{selectedStrategy?.dataStrategy}</span>
                                     </div>
                                 </div>
                             </div>
@@ -147,7 +161,7 @@ export function StrategyTable({ strategySolutions, pagination, currentPage, onPa
                             <div>
                                 <h3 className="text-lg font-medium text-gray-900 mb-3">Data Strategy Notes & Requests</h3>
                                 <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                                    {selectedStrategy.strategyDescription || "No description provided."}
+                                    {selectedStrategy?.strategyDescription || "No description provided."}
                                 </div>
                             </div>
 
@@ -155,7 +169,7 @@ export function StrategyTable({ strategySolutions, pagination, currentPage, onPa
                             <div>
                                 <h3 className="text-lg font-medium text-gray-900 mb-3">Answer</h3>
                                 <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                                    {selectedStrategy.answer || "No answer provided yet."}
+                                    {selectedStrategy?.answer || "No answer provided yet."}
                                 </div>
                             </div>
 
@@ -163,7 +177,7 @@ export function StrategyTable({ strategySolutions, pagination, currentPage, onPa
                             <div className="border-t border-gray-200 pt-4">
                                 <div className="text-sm text-gray-500">
                                     Submitted on{" "}
-                                    {new Date(selectedStrategy.createdAt).toLocaleString("en-GB", {
+                                    {new Date(selectedStrategy?.createdAt).toLocaleString("en-GB", {
                                         day: "2-digit",
                                         month: "2-digit",
                                         year: "numeric",

@@ -92,7 +92,9 @@ export default function StrategyPage() {
   }
 
   const strategies = strategiesData?.data || [];
-  const meta = strategiesData?.meta || {};
+  const meta = strategiesData
+
+  console.log("Meta data: ", meta)
 
   return (
     <div className="p-6 space-y-6">
@@ -261,7 +263,7 @@ export default function StrategyPage() {
 
       <div className="text-sm text-gray-600">
         Showing {(currentPage - 1) * 10 + 1} to{" "}
-        {Math.min(currentPage * 10, meta.total)} of {meta.total} results
+        {Math.min(currentPage * 10, meta.totalItems)} of {meta.totalItems} results
       </div>
     </div>
   );
